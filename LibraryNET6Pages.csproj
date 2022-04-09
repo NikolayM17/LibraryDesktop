@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="assets\add_icon.png" />
+    <None Remove="assets\add_icon_pressed.png" />
+    <None Remove="assets\Icon.png" />
+    <None Remove="assets\search.png" />
+    <None Remove="assets\search_pressed.png" />
+    <None Remove="Icon.png" />
+    <None Remove="search.png" />
+    <None Remove="search_pressed.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="assets\add_icon.png" />
+    <Resource Include="assets\add_icon_pressed.png" />
+    <Resource Include="assets\Icon.png" />
+    <Resource Include="assets\search.png" />
+    <Resource Include="assets\search_pressed.png" />
+    <Resource Include="Icon.png" />
+    <Resource Include="search.png" />
+    <Resource Include="search_pressed.png" />
+  </ItemGroup>
+
+</Project>
