@@ -100,28 +100,29 @@ namespace LibraryNET6Pages
 
 		private async void AdminEnterButton_Click(object sender, RoutedEventArgs e)
 		{
-			if (LoginTextBox.Text.ToLower() == "admin" && PasswordTextBox.Password.ToLower() == "admin")
+			var isEnterDataCorrect = MsSqlController.IsEnterDataCorrect(LoginTextBox.Text, PasswordTextBox.Password);
+
+			if (isEnterDataCorrect.Item1 && isEnterDataCorrect.Item2)
 			{
 				await Task.Delay(250);
 
-				/*new AdminWindow().Show();
-				Close();*/
+				NavigationService.Navigate(new AdminPage());
 			}
-			else if ((LoginTextBox.Text.ToLower() != "admin" && PasswordTextBox.Password.ToLower() != "admin"))
-			{
-				MessageBox.Show("Irregular Login or Password");
-			}
-			else if (LoginTextBox.Text.ToLower() != "admin")
-			{
-				MessageBox.Show("Irregular Login");
-			}
-			else if (PasswordTextBox.Password.ToLower() != "admin")
+			else if (isEnterDataCorrect.Item1)
 			{
 				MessageBox.Show("Irregular Password");
 			}
+			else if (isEnterDataCorrect.Item2)
+			{
+				MessageBox.Show("Irregular Login");
+			}
+			else
+			{
+				MessageBox.Show("Irregular Login or Password");
+			}
 		}
 
-		private void Window_KeyDown(object sender, KeyEventArgs e)
+		private void Page_KeyDown(object sender, KeyEventArgs e)
 		{
 			if (e.Key == Key.Enter)
 			{

@@ -1,0 +1,392 @@
+﻿<Page x:Class="LibraryNET6Pages.AddBookPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:LibraryNET6Pages"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="AddBookPage">
+	<Page.Resources>
+		<Style x:Key="NavigationButton" TargetType="Button">
+			<Setter Property="OverridesDefaultStyle" Value="True"/>
+			<Setter Property="Background" Value="White"/>
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="Button">
+						<Border x:Name="ButtonSearchBorder" BorderThickness="0" BorderBrush="Black"
+							   Background="{TemplateBinding Background}">
+							<ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+						</Border>
+						<ControlTemplate.Triggers>
+							<EventTrigger RoutedEvent="PreviewMouseDown">
+								<BeginStoryboard>
+									<Storyboard>
+										<ColorAnimation Storyboard.TargetProperty="Foreground.Color"
+													 Duration="0:0:0.1" To="White"/>
+										<ColorAnimation Storyboard.TargetProperty="Background.Color"
+													 Duration="0:0:0.1" To="#FF9001FF"/>
+									</Storyboard>
+								</BeginStoryboard>
+							</EventTrigger>
+
+							<EventTrigger RoutedEvent="PreviewMouseUp">
+								<BeginStoryboard>
+									<Storyboard>
+										<ColorAnimation Storyboard.TargetProperty="Foreground.Color"
+													 Duration="0:0:0.1" To="#FF9001FF"/>
+										<ColorAnimation Storyboard.TargetProperty="Background.Color"
+														Duration="0:0:0.1" To="White"/>
+									</Storyboard>
+								</BeginStoryboard>
+							</EventTrigger>
+						</ControlTemplate.Triggers>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
+		<Style x:Key="ImageButton" TargetType="Button">
+			<Setter Property="OverridesDefaultStyle" Value="True"/>
+			<Setter Property="Background" Value="White"/>
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="Button">
+						<Border x:Name="ButtonSearchBorder" BorderThickness="0" BorderBrush="Black"
+							   Background="{TemplateBinding Background}">
+							<ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+						</Border>
+						<ControlTemplate.Triggers>
+							<EventTrigger RoutedEvent="PreviewMouseDown">
+								<BeginStoryboard>
+									<Storyboard>
+										<ColorAnimation Storyboard.TargetProperty="Background.Color"
+														Duration="0:0:0.1" To="#FF9001FF"/>
+									</Storyboard>
+								</BeginStoryboard>
+							</EventTrigger>
+
+							<EventTrigger RoutedEvent="PreviewMouseUp">
+								<BeginStoryboard>
+									<Storyboard>
+										<ColorAnimation Storyboard.TargetProperty="Background.Color"
+														Duration="0:0:0.1" To="White"/>
+									</Storyboard>
+								</BeginStoryboard>
+							</EventTrigger>
+						</ControlTemplate.Triggers>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
+
+		<Style x:Key="EnterButtonStyle" TargetType="{x:Type Button}">
+			<Setter Property="OverridesDefaultStyle" Value="True"/>
+			<Setter Property="Background" Value="White"/>
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="{x:Type Button}">
+						<Border x:Name="ButtonSearchBorder" BorderThickness="0" BorderBrush="Black" Background="{TemplateBinding Background}">
+							<ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+						</Border>
+						<ControlTemplate.Triggers>
+							<EventTrigger RoutedEvent="UIElement.PreviewMouseDown">
+								<BeginStoryboard>
+									<Storyboard>
+										<ColorAnimation Storyboard.TargetProperty="Foreground.Color"
+									  Duration="0:0:0.1" To="White"/>
+										<ColorAnimation Storyboard.TargetProperty="Background.Color"
+									  Duration="0:0:0.1" To="#FF9001FF"/>
+									</Storyboard>
+								</BeginStoryboard>
+							</EventTrigger>
+
+							<EventTrigger RoutedEvent="UIElement.PreviewMouseUp">
+								<BeginStoryboard>
+									<Storyboard>
+										<ColorAnimation Storyboard.TargetProperty="Foreground.Color"
+									  Duration="0:0:0.1" To="#FF9001FF"/>
+										<ColorAnimation Storyboard.TargetProperty="Background.Color"
+									  Duration="0:0:0.1" To="White"/>
+									</Storyboard>
+								</BeginStoryboard>
+							</EventTrigger>
+						</ControlTemplate.Triggers>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
+		<Style x:Key="EnterButtonStyle2" TargetType="Button">
+			<Setter Property="OverridesDefaultStyle" Value="True"/>
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="Button">
+						<Border x:Name="ButtonSearchBorder"
+								BorderThickness="3" BorderBrush="#FF9001FF"
+								CornerRadius="25"
+								RenderOptions.EdgeMode="Aliased"
+								Background="{TemplateBinding Background}">
+							<ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+						</Border>
+						<ControlTemplate.Triggers>
+							<EventTrigger RoutedEvent="PreviewMouseDown">
+								<BeginStoryboard>
+									<Storyboard>
+										<ColorAnimation Storyboard.TargetProperty="Foreground.Color"
+													 Duration="0:0:0.1" To="White"/>
+										<ColorAnimation Storyboard.TargetProperty="Background.Color"
+													 Duration="0:0:0.1" To="#FF9001FF"/>
+									</Storyboard>
+								</BeginStoryboard>
+							</EventTrigger>
+
+							<EventTrigger RoutedEvent="PreviewMouseUp">
+								<BeginStoryboard>
+									<Storyboard>
+										<ColorAnimation Storyboard.TargetProperty="Foreground.Color"
+														Duration="0:0:0.1" To="#FF9001FF"/>
+										<ColorAnimation Storyboard.TargetProperty="Background.Color"
+														Duration="0:0:0.1" To="#FFEED9FF"/>
+									</Storyboard>
+								</BeginStoryboard>
+							</EventTrigger>
+
+							<EventTrigger RoutedEvent="MouseEnter">
+								<BeginStoryboard>
+									<Storyboard>
+										<ColorAnimation Storyboard.TargetProperty="Background.Color"
+														Duration="0:0:0.1" To="#FFEED9FF"/>
+									</Storyboard>
+								</BeginStoryboard>
+							</EventTrigger>
+
+							<EventTrigger RoutedEvent="MouseLeave">
+								<BeginStoryboard>
+									<Storyboard>
+										<ColorAnimation Storyboard.TargetProperty="Background.Color"
+														Duration="0:0:0.1" To="White"/>
+									</Storyboard>
+								</BeginStoryboard>
+							</EventTrigger>
+
+							<EventTrigger RoutedEvent="LostFocus">
+								<BeginStoryboard>
+									<Storyboard>
+										<ColorAnimation Storyboard.TargetProperty="Background.Color"
+														Duration="0:0:0.1" To="White"/>
+									</Storyboard>
+								</BeginStoryboard>
+							</EventTrigger>
+						</ControlTemplate.Triggers>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
+
+		<Style TargetType="{x:Type TextBox}" x:Key="type">
+			<Setter Property="HorizontalContentAlignment" Value="Center"/>
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="{x:Type TextBoxBase}">
+						<Border x:Name="border"
+								BorderBrush="#FF9001FF" BorderThickness="0,0,0,3"
+								Background="{TemplateBinding Background}"
+								SnapsToDevicePixels="True"
+								Margin="-85,0">
+							<ScrollViewer x:Name="PART_ContentHost" Focusable="False" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden"/>
+						</Border>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
+		<Style TargetType="{x:Type TextBox}" x:Key="type2">
+			<Setter Property="HorizontalContentAlignment" Value="Center"/>
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="{x:Type TextBoxBase}">
+						<Border x:Name="border"
+								BorderBrush="#FF9001FF" BorderThickness="0,0,0,1"
+								Background="{TemplateBinding Background}"
+								SnapsToDevicePixels="True"
+								Margin="0,0,-25,0">
+							<ScrollViewer x:Name="PART_ContentHost" Focusable="False" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden"/>
+						</Border>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
+
+	</Page.Resources>
+
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition/>
+			<RowDefinition/>
+			<RowDefinition/>
+			<RowDefinition/>
+			<RowDefinition/>
+			<RowDefinition/>
+			<RowDefinition/>
+			<RowDefinition/>
+			<RowDefinition/>
+			<RowDefinition/>
+			<RowDefinition/>
+			<RowDefinition/>
+			<RowDefinition/>
+			<RowDefinition/>
+			<RowDefinition/>
+		</Grid.RowDefinitions>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition/>
+			<ColumnDefinition/>
+			<ColumnDefinition/>
+			<ColumnDefinition/>
+			<ColumnDefinition/>
+			<ColumnDefinition/>
+			<ColumnDefinition/>
+			<ColumnDefinition/>
+			<ColumnDefinition/>
+			<ColumnDefinition/>
+		</Grid.ColumnDefinitions>
+
+		<Label Content="Admin"
+			  FontSize="50" FontWeight="Bold" FontFamily="Century Gothic" Foreground="#FF9001FF"
+			  VerticalContentAlignment="Top" HorizontalContentAlignment="Center"
+			  Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="0" Grid.RowSpan="3"/>
+
+		<Grid x:Name="Center" Grid.Column="0" Grid.ColumnSpan="10" Grid.Row="2" Grid.RowSpan="13">
+			<Grid.RowDefinitions>
+				<RowDefinition/>
+				<RowDefinition/>
+				<RowDefinition/>
+				<RowDefinition/>
+				<RowDefinition/>
+				<RowDefinition/>
+				<RowDefinition/>
+				<RowDefinition/>
+				<RowDefinition/>
+				<RowDefinition/>
+				<RowDefinition/>
+				<RowDefinition/>
+				<RowDefinition/>
+				<RowDefinition/>
+				<RowDefinition/>
+			</Grid.RowDefinitions>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition/>
+				<ColumnDefinition/>
+				<ColumnDefinition/>
+				<ColumnDefinition/>
+				<ColumnDefinition/>
+				<ColumnDefinition/>
+				<ColumnDefinition/>
+				<ColumnDefinition/>
+				<ColumnDefinition/>
+				<ColumnDefinition/>
+				<ColumnDefinition/>
+				<ColumnDefinition/>
+				<ColumnDefinition/>
+				<ColumnDefinition/>
+				<ColumnDefinition/>
+			</Grid.ColumnDefinitions>
+
+			<Border x:Name="ImageBorder"
+					BorderThickness="1" BorderBrush="#FF9001FF"
+					Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="3" Grid.RowSpan="10">
+				<Button x:Name="OpenFileDialogButton" Style="{StaticResource EnterButtonStyle}"
+					   FontSize="25" FontFamily="Calibri" FontWeight="Bold" Foreground="#FF9001FF"
+					   VerticalAlignment="Stretch"
+					   Click="OpenFileDialogButton_Click">
+					<Image x:Name="BookImage" Source="/assets/Icon.png" Stretch="Uniform"/>
+				</Button>
+			</Border>
+
+			<TextBox x:Name="TitleTextBox" Style="{StaticResource type}"
+					 Grid.Column="6" Grid.ColumnSpan="7" Grid.Row="1" Grid.RowSpan="2"
+					 HorizontalAlignment="Center"
+					 FontSize="35" FontFamily="Century Gothic" Foreground="Black"
+					 VerticalContentAlignment="Bottom" HorizontalContentAlignment="Stretch"
+					 BorderThickness="0,0,0,0" BorderBrush="#FF9001FF"
+					 GotFocus="TitleTextBox_GotFocus" LostFocus="TitleTextBox_LostFocus"/>
+			<TextBlock x:Name="TitleWaterMark" Text="Название"
+					   Grid.Column="7" Grid.ColumnSpan="5" Grid.Row="1" Grid.RowSpan="2"
+					   FontSize="35" FontFamily="Century Gothic" Foreground="#FFC8C8FF"
+					   IsHitTestVisible="False"
+					   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+			<Label Content="Автор:" FontSize="20" FontFamily="Century Gothic" Foreground="#FF9001FF"
+				  VerticalContentAlignment="Bottom" HorizontalContentAlignment="Right"
+				  Grid.Column="4" Grid.ColumnSpan="2" Grid.Row="3" Grid.RowSpan="2"/>
+
+			<TextBox x:Name="AuthorTextBox" Style="{StaticResource type2}"
+					 FontSize="20" FontFamily="Century Gothic"
+					 Grid.Column="6" Grid.ColumnSpan="7" Grid.Row="3" Grid.RowSpan="2"
+					 HorizontalAlignment="Left" VerticalContentAlignment="Bottom" HorizontalContentAlignment="Stretch"
+					 BorderThickness="0,0,0,1" BorderBrush="#FF9001FF"
+					 />
+
+			<Label Content="Жанр:" FontSize="20" FontFamily="Century Gothic" Foreground="#FF9001FF"
+				  VerticalContentAlignment="Bottom" HorizontalContentAlignment="Right"
+				  Grid.Column="4" Grid.ColumnSpan="2" Grid.Row="5" Grid.RowSpan="2"/>
+
+			<TextBox x:Name="GenreTextBox" Style="{StaticResource type2}"
+					 FontSize="20" FontFamily="Century Gothic"
+					 Grid.Column="6" Grid.ColumnSpan="7" Grid.Row="5" Grid.RowSpan="2"
+					 HorizontalAlignment="Left" VerticalContentAlignment="Bottom" HorizontalContentAlignment="Left"
+					 BorderThickness="0,0,0,1" BorderBrush="#FF9001FF"/>
+
+			<Label Content="Год:" FontSize="20" FontFamily="Century Gothic" Foreground="#FF9001FF"
+				   Grid.Column="4" Grid.ColumnSpan="2" Grid.Row="7" Grid.RowSpan="2"
+				   VerticalContentAlignment="Bottom" HorizontalContentAlignment="Right"/>
+
+			<TextBox x:Name="YearTextBox" Style="{StaticResource type2}"
+					 FontSize="20" FontFamily="Century Gothic"
+					 Grid.Column="6" Grid.ColumnSpan="7" Grid.Row="7" Grid.RowSpan="2"
+					 HorizontalAlignment="Left" VerticalContentAlignment="Bottom" HorizontalContentAlignment="Left"
+					 BorderThickness="0,0,0,1" BorderBrush="#FF9001FF"/>
+
+			<Border Grid.Column="5" Grid.ColumnSpan="7" Grid.Row="10" Grid.RowSpan="3"
+					BorderThickness="2" BorderBrush="#FF9001FF"
+					Margin="-1" Padding="3" CornerRadius="10">
+				<Grid>
+					<ScrollViewer VerticalScrollBarVisibility="Hidden" Padding="5,0">
+						<TextBox x:Name="DescriptionTextBox"
+								 FontSize="15" FontFamily="Century Gothic"
+								 TextWrapping="Wrap"
+								 BorderThickness="0"
+								 GotFocus="DescriptionTextBox_GotFocus" LostFocus="DescriptionTextBox_LostFocus"/>
+					</ScrollViewer>
+					<TextBlock x:Name="DescriptionWatermark" Text="Описание"
+							   FontFamily="Century Gothic" Foreground="#FFC8C8FF" FontSize="15"
+							   Padding="5,0"
+							   IsHitTestVisible="False"/>
+				</Grid>
+			</Border>
+
+			<!--<Border x:Name="ButtonCreateBorder" Visibility="Collapsed"
+				   Grid.Column="12" Grid.ColumnSpan="3" Grid.Row="13" Grid.RowSpan="2"
+				   BorderThickness="3" BorderBrush="#FF9001FF">
+				<Button x:Name="CreateButton" Style="{StaticResource EnterButtonStyle}"
+					   Content="Create" FontSize="35" FontFamily="Century Gothic" Foreground="#FF9001FF"
+					   Click="CreateButton_Click"/>
+			</Border>-->
+
+			<Button x:Name="AdminEnterButton" Style="{StaticResource EnterButtonStyle2}" Content="Create"
+					Grid.Row="13" Grid.RowSpan="2" Grid.Column="12" Grid.ColumnSpan="3"
+					FontFamily="Century Gothic" FontSize="25"
+					Background="White" Foreground="#FF9000FF"
+					Margin="-5,-5,5,5"
+					Click="CreateButton_Click"/>
+
+			<!--<Border x:Name="ButtonOpenFileDialogBorder"
+				   Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="13" Grid.RowSpan="2"
+				   Margin="0, 10, 0, 0"
+				   BorderThickness="3" BorderBrush="#FF9001FF">
+				<Button x:Name="OpenFileDialogButton" Style="{StaticResource EnterButtonStyle}"
+					   Content=". . ." FontSize="25" FontFamily="Calibri" FontWeight="Bold" Foreground="#FF9001FF"
+					   VerticalAlignment="Stretch"
+					   Click="OpenFileDialogButton_Click"/>
+			</Border>
+			-->
+		</Grid>
+	</Grid>
+</Page>

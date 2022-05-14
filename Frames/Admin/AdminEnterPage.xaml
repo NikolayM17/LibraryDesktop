@@ -6,7 +6,8 @@
       xmlns:local="clr-namespace:LibraryNET6Pages"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="AdminEnterPage">
+      Title="AdminEnterPage"
+	  KeyDown="Page_KeyDown">
 	<Page.Resources>
 		<Style x:Key="EnterButtonStyle" TargetType="Button">
 			<Setter Property="OverridesDefaultStyle" Value="True"/>
