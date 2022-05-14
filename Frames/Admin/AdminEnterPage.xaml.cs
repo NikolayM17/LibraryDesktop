@@ -9,6 +9,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
@@ -23,7 +24,25 @@ namespace LibraryNET6Pages
 		public AdminEnterPage()
 		{
 			InitializeComponent();
+
+			StartFrameAnimation();
 		}
+
+		private void StartFrameAnimation() =>
+			BeginAnimation(OpacityProperty, new DoubleAnimation()
+			{
+				From = 0,
+				To = 1,
+				Duration = TimeSpan.FromSeconds(0.15)
+			});
+
+		private void EndFrameAnimation() =>
+			BeginAnimation(OpacityProperty, new DoubleAnimation()
+			{
+				From = 1,
+				To = 0,
+				Duration = TimeSpan.FromSeconds(0.15)
+			});
 
 		private void TextBox_MouseEnter(object sender, MouseEventArgs e)
 		{
@@ -104,7 +123,9 @@ namespace LibraryNET6Pages
 
 			if (isEnterDataCorrect.Item1 && isEnterDataCorrect.Item2)
 			{
-				await Task.Delay(250);
+				EndFrameAnimation();
+
+				await Task.Delay(150);
 
 				NavigationService.Navigate(new AdminPage());
 			}
@@ -127,6 +148,18 @@ namespace LibraryNET6Pages
 			if (e.Key == Key.Enter)
 			{
 				AdminEnterButton_Click(sender, e);
+			}
+		}
+
+		private async void MainButton_Click(object sender, RoutedEventArgs e)
+		{
+			if (Opacity == 1)
+			{
+				EndFrameAnimation();
+
+				await Task.Delay(350);
+
+				NavigationService.Navigate(new MainFrame());
 			}
 		}
 	}

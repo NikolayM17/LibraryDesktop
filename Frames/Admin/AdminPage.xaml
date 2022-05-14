@@ -4,11 +4,12 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:LibraryNET6Pages"
-      mc:Ignorable="d" 
+      mc:Ignorable="d"
       d:DesignHeight="450" d:DesignWidth="800"
       Title="AdminPage"
 	  KeyDown="Page_KeyDown">
 	<Page.Resources>
+		<!--RenderOptions.EdgeMode="Aliased"-->
 		<Style x:Key="SearchButton" TargetType="{x:Type Button}">
 			<Setter Property="OverridesDefaultStyle" Value="False"/>
 			<Setter Property="SnapsToDevicePixels" Value="False"/>
@@ -19,13 +20,12 @@
 				<Setter.Value>
 					<ControlTemplate TargetType="{x:Type Button}">
 						<Border x:Name="SearchButtonBorder"
-	RenderOptions.BitmapScalingMode="HighQuality"
-	BorderThickness="3,3,3,3" BorderBrush="#FF9001FF"
-	Padding="0,0,5,0"
-	SnapsToDevicePixels="False"
-	Background="{TemplateBinding Background}"
-	CornerRadius="0,20,20,0" RenderOptions.EdgeMode="Aliased"
-	>
+								BorderThickness="3,3,3,3" BorderBrush="#FF9001FF"
+								Padding="0,0,5,0"
+								Margin="3,0,-3,0"
+								Background="{TemplateBinding Background}"
+								CornerRadius="3,20,3,3"
+								>
 							<ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
 						</Border>
 						<ControlTemplate.Triggers>
@@ -94,8 +94,9 @@
 			<Setter Property="Template">
 				<Setter.Value>
 					<ControlTemplate TargetType="Button">
-						<Border x:Name="ButtonSearchBorder" BorderThickness="0" BorderBrush="Black"
-	Background="{TemplateBinding Background}">
+						<Border x:Name="ButtonSearchBorder"
+								BorderThickness="2" BorderBrush="#FF9001FF"
+								Background="{TemplateBinding Background}">
 							<ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
 						</Border>
 						<ControlTemplate.Triggers>
@@ -113,6 +114,90 @@
 									<Storyboard>
 										<ColorAnimation Storyboard.TargetProperty="Background.Color"
 	Duration="0:0:0.1" To="White"/>
+									</Storyboard>
+								</BeginStoryboard>
+							</EventTrigger>
+
+							<EventTrigger RoutedEvent="MouseEnter">
+								<BeginStoryboard>
+									<Storyboard>
+										<ColorAnimation Storyboard.TargetProperty="Background.Color"
+														Duration="0:0:0.1" To="#FFEED9FF"/>
+									</Storyboard>
+								</BeginStoryboard>
+							</EventTrigger>
+
+							<EventTrigger RoutedEvent="MouseLeave">
+								<BeginStoryboard>
+									<Storyboard>
+										<ColorAnimation Storyboard.TargetProperty="Background.Color"
+														Duration="0:0:0.1" To="White"/>
+									</Storyboard>
+								</BeginStoryboard>
+							</EventTrigger>
+						</ControlTemplate.Triggers>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
+		<Style x:Key="EnterButtonStyle2" TargetType="Button">
+			<Setter Property="OverridesDefaultStyle" Value="True"/>
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="Button">
+						<Border x:Name="ButtonSearchBorder"
+								BorderThickness="2" BorderBrush="#FF9001FF"
+								CornerRadius="5" Padding="5"
+								HorizontalAlignment="Center"
+								Background="{TemplateBinding Background}">
+							<ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+						</Border>
+						<ControlTemplate.Triggers>
+							<EventTrigger RoutedEvent="PreviewMouseDown">
+								<BeginStoryboard>
+									<Storyboard>
+										<ColorAnimation Storyboard.TargetProperty="Foreground.Color"
+													 Duration="0:0:0.1" To="White"/>
+										<ColorAnimation Storyboard.TargetProperty="Background.Color"
+													 Duration="0:0:0.1" To="#FF9001FF"/>
+									</Storyboard>
+								</BeginStoryboard>
+							</EventTrigger>
+
+							<EventTrigger RoutedEvent="PreviewMouseUp">
+								<BeginStoryboard>
+									<Storyboard>
+										<ColorAnimation Storyboard.TargetProperty="Foreground.Color"
+														Duration="0:0:0.1" To="#FF9001FF"/>
+										<ColorAnimation Storyboard.TargetProperty="Background.Color"
+														Duration="0:0:0.1" To="#FFEED9FF"/>
+									</Storyboard>
+								</BeginStoryboard>
+							</EventTrigger>
+
+							<EventTrigger RoutedEvent="MouseEnter">
+								<BeginStoryboard>
+									<Storyboard>
+										<ColorAnimation Storyboard.TargetProperty="Background.Color"
+														Duration="0:0:0.1" To="#FFEED9FF"/>
+									</Storyboard>
+								</BeginStoryboard>
+							</EventTrigger>
+
+							<EventTrigger RoutedEvent="MouseLeave">
+								<BeginStoryboard>
+									<Storyboard>
+										<ColorAnimation Storyboard.TargetProperty="Background.Color"
+														Duration="0:0:0.1" To="White"/>
+									</Storyboard>
+								</BeginStoryboard>
+							</EventTrigger>
+
+							<EventTrigger RoutedEvent="LostFocus">
+								<BeginStoryboard>
+									<Storyboard>
+										<ColorAnimation Storyboard.TargetProperty="Background.Color"
+														Duration="0:0:0.1" To="White"/>
 									</Storyboard>
 								</BeginStoryboard>
 							</EventTrigger>
@@ -145,19 +230,18 @@
 		</Style>
 		
 		<Style TargetType="{x:Type TextBox}" x:Key="SearchTBStyle">
-			<Setter Property="Padding" Value="20,0,50,0"/>
+			<Setter Property="Padding" Value="20,0,10,0"/>
 			<Setter Property="Template">
 				<Setter.Value>
 					<ControlTemplate TargetType="{x:Type TextBoxBase}">
 						<Border x:Name="border"
-	BorderBrush="#FF9001FF" BorderThickness="3"
-	Margin="0,0,10,0"
-	Background="{TemplateBinding Background}"
-	SnapsToDevicePixels="True"
-	CornerRadius="20">
+								BorderBrush="#FF9001FF" BorderThickness="3"
+								Background="{TemplateBinding Background}"
+								Focusable="False"
+								CornerRadius="20,3,3,3">
 							<ScrollViewer x:Name="PART_ContentHost"
-	Focusable="False"
-	HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden"/>
+										  Focusable="False"
+										  HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden"/>
 						</Border>
 					</ControlTemplate>
 				</Setter.Value>
@@ -177,7 +261,6 @@
 	Value="true" />
 			<Setter Property="HasDropShadow"
 	Value="True" />
-			<EventSetter Event="MouseEnter" Handler="ContextMenu_MouseEnter"/>
 			<Setter Property="Template">
 				<Setter.Value>
 					<ControlTemplate TargetType="{x:Type ContextMenu}">
@@ -313,17 +396,26 @@
 					<ColumnDefinition/>
 					<ColumnDefinition/>
 					<ColumnDefinition/>
-					<ColumnDefinition/>
-					<ColumnDefinition/>
-					<ColumnDefinition/>
-					<ColumnDefinition/>
 				</Grid.ColumnDefinitions>
 				<Grid.RowDefinitions>
 					<RowDefinition/>
 					<RowDefinition/>
 					<RowDefinition/>
 				</Grid.RowDefinitions>
-				<Button x:Name="Main" Style="{StaticResource NavigationButton}" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Content="Admin" FontWeight="Bold" FontSize="35" Foreground="#FF9001FF" Background="White" Focusable="False" BorderBrush="White" Margin="25,0"/>
+
+				<Label x:Name="AdminLabel" Content="Admin"
+					   FontSize="35" FontWeight="Bold" FontFamily="Century Gothic" Foreground="#FF9001FF"
+					   VerticalContentAlignment="Top" HorizontalContentAlignment="Center"
+					   Grid.Column="7" Grid.ColumnSpan="2"/>
+
+				<Button x:Name="MainButton" Style="{StaticResource NavigationButton}"
+						Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
+						Content="Главная" FontSize="35"
+						VerticalContentAlignment="Top"
+						Foreground="#FF9001FF" Background="White" BorderBrush="White"
+						Focusable="False"
+						Margin="10,0"
+						Click="MainButton_Click"/>
 			</Grid>
 
 			<Grid x:Name="Center">
@@ -352,13 +444,16 @@
 					<ColumnDefinition Width="*" />
 				</Grid.ColumnDefinitions>
 
-				<Button x:Name="AddBookButton" Style="{StaticResource ImageButton}"
-	Grid.Column="13" Grid.Row="4" Grid.RowSpan="2"
-	PreviewMouseDown="AddBookButton_PreviewMouseDown" PreviewMouseUp="AddBookButton_PreviewMouseUp">
-					<Image x:Name="AddBookImage" Source="/assets/add_icon.png">
-						<Image.Style>
+				<Button x:Name="AddBookButton" Style="{StaticResource EnterButtonStyle2}"
+						Grid.Column="13" Grid.Row="4" Grid.RowSpan="2"
+						Background="White"
+						Click="AddBookButton_Click"
+						PreviewMouseDown="AddBookButton_PreviewMouseDown" PreviewMouseUp="AddBookButton_PreviewMouseUp"
+						>
+					<Image x:Name="AddBookImage"
+						   Source="/assets/add_icon.png">
+						<!--<Image.Style>
 							<Style TargetType="{x:Type Image}">
-								<!--<Setter Property="Source" Value="search.png"/>-->
 								<Style.Triggers>
 									<DataTrigger Binding="{Binding Path=IsMouseOver,
 	ElementName=ButtonSearchBorder}" Value="True">
@@ -372,68 +467,50 @@
 									</DataTrigger>
 								</Style.Triggers>
 							</Style>
-						</Image.Style>
+						</Image.Style>-->
 					</Image>
 				</Button>
 
-				<TextBox x:Name="SearchTextBox" Style="{StaticResource SearchTBStyle}"
-	Grid.Row="2" Grid.RowSpan="2" Grid.Column="3" Grid.ColumnSpan="8"
-	VerticalContentAlignment="Center"
-	FontSize="20" FontFamily="Century Gothic" Foreground="#FF9001FF"
-	GotFocus="SearchTextBox_GotFocus" LostFocus="SearchTextBox_LostFocus">
-				</TextBox>
-				<TextBlock x:Name="SearchWatermark" Text="Поиск"
-	Grid.Row="2" Grid.RowSpan="2" Grid.Column="3" Grid.ColumnSpan="8"
-	IsHitTestVisible="False"
-	FontSize="20" FontFamily="Century Gothic" Foreground="#FFC8C8FF"
-	VerticalAlignment="Center" Padding="20,0"/>
+				<Grid x:Name="SearchGrid"
+						 Grid.Row="2" Grid.RowSpan="2" Grid.Column="3" Grid.ColumnSpan="8"
+					  >
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition/>
+						<ColumnDefinition/>
+						<ColumnDefinition/>
+						<ColumnDefinition/>
+						<ColumnDefinition/>
+						<ColumnDefinition/>
+						<ColumnDefinition/>
+						<ColumnDefinition/>
+					</Grid.ColumnDefinitions>
 
-				<Button x:Name="SearchButton" Style="{StaticResource SearchButton}" RenderOptions.BitmapScalingMode="HighQuality"
-	Grid.Column="10" Grid.ColumnSpan="1" Grid.Row="2" Grid.RowSpan="2"
-	Click="SearchButton_Click" PreviewMouseDown="SearchButton_PreviewMouseDown" PreviewMouseUp="SearchButton_PreviewMouseUp">
-					<Image x:Name="SearchImage" Source="/assets/search.png" SnapsToDevicePixels="False">
-						<Image.Style>
-							<Style TargetType="{x:Type Image}">
-								<!--<Setter Property="Source" Value="search.png"/>-->
-								<Style.Triggers>
-									<DataTrigger Binding="{Binding Path=IsMouseOver,
-	ElementName=ButtonSearchBorder}" Value="True">
-										<Setter Property="Source" Value="/assets/search.png"/>
-									</DataTrigger>
-									<DataTrigger Binding="{Binding RelativeSource={RelativeSource
-	FindAncestor, AncestorType={x:Type Button},
-	AncestorLevel=1}, Path=IsPressed}"
-	Value="True">
-										<Setter Property="Source" Value="/assets/search_pressed.png"/>
-									</DataTrigger>
-								</Style.Triggers>
-							</Style>
-						</Image.Style>
-					</Image>
-					<!--<Image Source="assets\search.png" Stretch="Uniform" IsHitTestVisible="False">
-	<Image.Style>
-	<Style TargetType="{x:Type Image}">
-	<Style.Triggers>
-	<DataTrigger Binding="{Binding Path=IsMouseOver,
-	ElementName=ButtonSearchBorder}" Value="True">
-	<Setter Property="Source" Value="assets\search_pressed.png"/>
-	</DataTrigger>
-	<DataTrigger Binding="{Binding RelativeSource={RelativeSource
-	FindAncestor, AncestorType={x:Type Button},
-	AncestorLevel=1}, Path=IsPressed}"
-	Value="True">
-	<Setter Property="Source" Value="assets\search_pressed.png"/>
-	</DataTrigger>
-	</Style.Triggers>
-	</Style>
-	</Image.Style>
-	</Image>-->
-				</Button>
+					<TextBox x:Name="SearchTextBox" Style="{StaticResource SearchTBStyle}"
+							 Grid.ColumnSpan="7"
+							 VerticalContentAlignment="Center"
+							 FontSize="20" FontFamily="Century Gothic" Foreground="#FF9001FF"
+							 GotFocus="SearchTextBox_GotFocus"  LostFocus="SearchTextBox_LostFocus"
+							 MouseEnter="SearchTextBox_MouseEnter" MouseLeave="SearchTextBox_MouseLeave"
+							 />
+					<TextBlock x:Name="SearchWatermark" Text="Поиск"
+						   Grid.ColumnSpan="7"
+						   IsHitTestVisible="False"
+						   FontSize="20" FontFamily="Century Gothic" Foreground="#FFC8C8FF"
+						   VerticalAlignment="Center" Padding="20,0"/>
+
+					<Button x:Name="SearchButton" Style="{StaticResource SearchButton}"
+							Grid.Column="7"
+							Click="SearchButton_Click"
+							PreviewMouseDown="SearchButton_PreviewMouseDown"  PreviewMouseUp="SearchButton_PreviewMouseUp">
+						<Image x:Name="SearchImage" Source="/assets/search.png"/>
+					</Button>
+				</Grid>
 			</Grid>
 		</DockPanel>
 
 		<ScrollViewer x:Name="Bottom"
-	Grid.Column="0" Grid.ColumnSpan="5" Grid.Row="2" Grid.RowSpan="3">
+					  Grid.Column="0" Grid.ColumnSpan="5" Grid.Row="2" Grid.RowSpan="3"
+					  >
 			<StackPanel x:Name="SearchResultsStackPanel"/>
 		</ScrollViewer>
 	</Grid>

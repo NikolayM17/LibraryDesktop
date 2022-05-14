@@ -6,7 +6,7 @@
       xmlns:local="clr-namespace:LibraryNET6Pages"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-	  Opacity="0"
+	  Opacity="1"
       Title="MainFrame">
 	<Page.Resources>
 		<Style x:Key="NavigationButton" TargetType="Button">
@@ -15,8 +15,9 @@
 			<Setter Property="Template">
 				<Setter.Value>
 					<ControlTemplate TargetType="Button">
-						<Border x:Name="ButtonSearchBorder" BorderThickness="0" BorderBrush="Black"
-							   Background="{TemplateBinding Background}">
+						<Border x:Name="ButtonSearchBorder"
+								BorderThickness="0" BorderBrush="Black"
+								Background="{TemplateBinding Background}">
 							<ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
 						</Border>
 						<ControlTemplate.Triggers>
@@ -46,10 +47,77 @@
 				</Setter.Value>
 			</Setter>
 		</Style>
+		<Style x:Key="EnterButtonStyle2" TargetType="Button">
+			<Setter Property="OverridesDefaultStyle" Value="True"/>
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="Button">
+						<Border x:Name="ButtonSearchBorder"
+								BorderThickness="3" BorderBrush="#FF9001FF"
+								CornerRadius="10"
+								Padding="10,5"
+								Background="{TemplateBinding Background}">
+							<ContentPresenter
+								HorizontalAlignment="Center" VerticalAlignment="Center"/>
+						</Border>
+						<ControlTemplate.Triggers>
+							<EventTrigger RoutedEvent="PreviewMouseDown">
+								<BeginStoryboard>
+									<Storyboard>
+										<ColorAnimation Storyboard.TargetProperty="Foreground.Color"
+													 Duration="0:0:0.1" To="White"/>
+										<ColorAnimation Storyboard.TargetProperty="Background.Color"
+													 Duration="0:0:0.1" To="#FF9001FF"/>
+									</Storyboard>
+								</BeginStoryboard>
+							</EventTrigger>
+
+							<EventTrigger RoutedEvent="PreviewMouseUp">
+								<BeginStoryboard>
+									<Storyboard>
+										<ColorAnimation Storyboard.TargetProperty="Foreground.Color"
+														Duration="0:0:0.1" To="#FF9001FF"/>
+										<ColorAnimation Storyboard.TargetProperty="Background.Color"
+														Duration="0:0:0.1" To="#FFEED9FF"/>
+									</Storyboard>
+								</BeginStoryboard>
+							</EventTrigger>
+
+							<EventTrigger RoutedEvent="MouseEnter">
+								<BeginStoryboard>
+									<Storyboard>
+										<ColorAnimation Storyboard.TargetProperty="Background.Color"
+														Duration="0:0:0.1" To="#FFEED9FF"/>
+									</Storyboard>
+								</BeginStoryboard>
+							</EventTrigger>
+
+							<EventTrigger RoutedEvent="MouseLeave">
+								<BeginStoryboard>
+									<Storyboard>
+										<ColorAnimation Storyboard.TargetProperty="Background.Color"
+														Duration="0:0:0.1" To="White"/>
+									</Storyboard>
+								</BeginStoryboard>
+							</EventTrigger>
+
+							<EventTrigger RoutedEvent="LostFocus">
+								<BeginStoryboard>
+									<Storyboard>
+										<ColorAnimation Storyboard.TargetProperty="Background.Color"
+														Duration="0:0:0.1" To="White"/>
+									</Storyboard>
+								</BeginStoryboard>
+							</EventTrigger>
+						</ControlTemplate.Triggers>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
 	</Page.Resources>
 		<Grid x:Name="grid">
 		<DockPanel>
-			<Grid x:Name="Top" DockPanel.Dock="Top">
+			<Grid x:Name="Top" DockPanel.Dock="Top" Margin="0,10,0,0">
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition/>
 					<ColumnDefinition/>
@@ -57,18 +125,24 @@
 					<ColumnDefinition/>
 				</Grid.ColumnDefinitions>
 
-				<Button x:Name="Books" Style="{StaticResource NavigationButton}" Content="Каталог" FontSize="35" Foreground="#FF9001FF" Background="White" Focusable="False" BorderBrush="White" Click="Books_Click"/>
+				<Button x:Name="Books" Style="{StaticResource NavigationButton}"
+						Content="Каталог" FontSize="35"
+						Foreground="#FF9001FF" Background="White" BorderBrush="White"
+						Focusable="False"
+						Margin="25,0"
+						Click="Books_Click"/>
 			</Grid>
 			<DockPanel DockPanel.Dock="Bottom" >
-				<Border x:Name="AdminAuthButtonBorder" DockPanel.Dock="Right"
-				   BorderThickness="3" BorderBrush="#FF9001FF">
-					<Button x:Name="AdminAuthButton" Style="{StaticResource NavigationButton}"
-					   Content="Admin" FontSize="50" FontFamily="Century Gothic" Foreground="#FF9001FF"
-						   Click="AdminAuthButton_Click"/>
-				</Border>
+				<Button x:Name="AdminAuthButton" Style="{StaticResource EnterButtonStyle2}"
+						DockPanel.Dock="Right"
+						Background="White" Foreground="#FF9001FF"
+						Content="Admin" FontSize="35" FontFamily="Century Gothic"
+						Margin="-5,-5,5,5"
+						Click="AdminAuthButton_Click"/>
 				<Label DockPanel.Dock="Right"/>
 			</DockPanel>
 			<Image Source="/assets/Icon.png" />
+
 		</DockPanel>
 	</Grid>
 </Page>

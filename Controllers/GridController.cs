@@ -5,6 +5,7 @@ using System.Windows.Media;
 using System.Collections.Generic;
 using System.Windows.Controls;
 using System.Windows.Navigation;
+using System.Threading.Tasks;
 
 namespace LibraryNET6Pages
 {
@@ -76,7 +77,7 @@ namespace LibraryNET6Pages
 		{
 			_currentBook = book;
 
-			border.Child = CreateButton(ImageConverter.Convert.ByteArrayToWpfImage(Convert.FromBase64String(book.Image)));
+			border.Child = CreateButton(ImageController.Convert.ByteArrayToWpfImage(Convert.FromBase64String(book.Image)));
 
 			return border;
 		}
@@ -158,9 +159,25 @@ namespace LibraryNET6Pages
 					).Source*/
 			};
 
-		private void button_Click(object sender, RoutedEventArgs e)
-			=> _pageSender.NavigationService.Navigate(_pageSender is AdminPage ?
-				new EditBookPage(_currentBook) : new BookPage(_currentBook, _pageSender));
+		private async void button_Click(object sender, RoutedEventArgs e)
+		{
+			if (_pageSender is AdminPage)
+			{
+				((AdminPage)_pageSender).EndFrameAnimation();
+				
+				await Task.Delay(350);
+
+				_pageSender.NavigationService.Navigate(new EditBookPage(_currentBook));
+			}
+			else
+			{
+				((CataloguePage)_pageSender).EndFrameAnimation();
+
+				await Task.Delay(350);
+
+				_pageSender.NavigationService.Navigate(new BookPage(_currentBook, _pageSender));
+			}
+		}
 
 		private void menuItem_Click(object sender, RoutedEventArgs e)
 		{

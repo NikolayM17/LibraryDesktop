@@ -4,7 +4,7 @@ using System.Windows.Media.Imaging;
 
 namespace LibraryNET6Pages
 {
-	static class ImageConverter
+	static class ImageController
 	{
 		public static class Convert
 		{

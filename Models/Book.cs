@@ -21,8 +21,6 @@
 		public int Date { get => _date; private set { _date = value; } }
 		public byte[] ByteImage { get => _byteImage; private set { _byteImage = value; } }
 
-		public Book() { }
-
 		public Book(int id, string title, string author, string genre,
 			string description, string image, int date)
 		{

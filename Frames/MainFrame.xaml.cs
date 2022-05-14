@@ -53,13 +53,20 @@ namespace LibraryNET6Pages
 			NavigationService.Navigate(new AdminEnterPage());
 		}
 
-		private void Books_Click(object sender, RoutedEventArgs e)
+		private async void Books_Click(object sender, RoutedEventArgs e)
 		{
-			/*EndFrameAnimation();
+			if (Opacity == 1)
+			{
+				EndFrameAnimation();
 
-			await Task.Delay(150);*/
+				await Task.Delay(350);
 
-			NavigationService.Navigate(new CataloguePage());
+				try
+				{
+					NavigationService.Navigate(new CataloguePage());
+				}
+				catch (NullReferenceException ex) { }
+			}
 		}
 	}
 }

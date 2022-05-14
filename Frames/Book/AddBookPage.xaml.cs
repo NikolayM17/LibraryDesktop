@@ -10,6 +10,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
@@ -26,7 +27,25 @@ namespace LibraryNET6Pages
 		public AddBookPage()
 		{
 			InitializeComponent();
+
+			StartFrameAnimation();
 		}
+
+		private void StartFrameAnimation() =>
+			BeginAnimation(OpacityProperty, new DoubleAnimation()
+			{
+				From = 0,
+				To = 1,
+				Duration = TimeSpan.FromSeconds(0.15)
+			});
+
+		public void EndFrameAnimation() =>
+			BeginAnimation(OpacityProperty, new DoubleAnimation()
+			{
+				From = 1,
+				To = 0,
+				Duration = TimeSpan.FromSeconds(0.15)
+			});
 
 		private void CreateButton_Click(object sender, RoutedEventArgs e)
 		{
@@ -36,7 +55,7 @@ namespace LibraryNET6Pages
 				AuthorTextBox.Text,
 				GenreTextBox.Text,
 				DescriptionTextBox.Text,
-				ImageConverter.Convert.WpfImageToByteArray(BookImage),
+				ImageController.Convert.WpfImageToByteArray(BookImage),
 				short.Parse(YearTextBox.Text)));
 
 			if (!(message is null))
@@ -93,5 +112,16 @@ namespace LibraryNET6Pages
 			}
 		}
 
+		private async void AdminButton_Click(object sender, RoutedEventArgs e)
+		{
+			if (Opacity == 1)
+			{
+				EndFrameAnimation();
+
+				await Task.Delay(350);
+
+				NavigationService.Navigate(new AdminPage());
+			}
+		}
 	}
 }

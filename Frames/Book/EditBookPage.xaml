@@ -40,6 +40,26 @@
 									</Storyboard>
 								</BeginStoryboard>
 							</EventTrigger>
+
+							<EventTrigger RoutedEvent="PreviewMouseUp">
+								<BeginStoryboard>
+									<Storyboard>
+										<ColorAnimation Storyboard.TargetProperty="Foreground.Color"
+														Duration="0:0:0.1" To="#FF9001FF"/>
+										<ColorAnimation Storyboard.TargetProperty="Background.Color"
+														Duration="0:0:0.1" To="#FFEED9FF"/>
+									</Storyboard>
+								</BeginStoryboard>
+							</EventTrigger>
+
+							<EventTrigger RoutedEvent="MouseEnter">
+								<BeginStoryboard>
+									<Storyboard>
+										<ColorAnimation Storyboard.TargetProperty="Background.Color"
+														Duration="0:0:0.1" To="#FFEED9FF"/>
+									</Storyboard>
+								</BeginStoryboard>
+							</EventTrigger>
 						</ControlTemplate.Triggers>
 					</ControlTemplate>
 				</Setter.Value>
@@ -189,7 +209,6 @@
 						<Border x:Name="ButtonSearchBorder"
 								BorderThickness="3" BorderBrush="#FF9001FF"
 								CornerRadius="5"
-								RenderOptions.EdgeMode="Aliased"
 								Background="{TemplateBinding Background}">
 							<ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
 						</Border>
@@ -313,10 +332,12 @@
 			<ColumnDefinition/>
 		</Grid.ColumnDefinitions>
 
-		<Label x:Name="TitleLabel" Content="Admin"
-			  FontSize="50" FontWeight="Bold" FontFamily="Century Gothic" Foreground="#FF9001FF"
-			  VerticalContentAlignment="Top" HorizontalContentAlignment="Center"
-			  Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="0" Grid.RowSpan="3"/>
+		<Button x:Name="AdminButton" Style="{StaticResource NavigationButton}"
+				Grid.Column="0" Grid.ColumnSpan="2" Grid.RowSpan="2"
+				Content="Admin" FontWeight="Bold" FontSize="35"
+				Foreground="#FF9001FF" Background="White" BorderBrush="White"
+				Focusable="False"
+				Margin="10,10,10,0" Click="AdminButton_Click"/>
 
 		<Grid x:Name="Center" Grid.Column="0" Grid.ColumnSpan="10" Grid.Row="2" Grid.RowSpan="13">
 			<Grid.RowDefinitions>

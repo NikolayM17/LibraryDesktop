@@ -85,6 +85,15 @@
 				<ColumnDefinition/>
 			</Grid.ColumnDefinitions>
 
+			<Button x:Name="CatalogueButton" Style="{StaticResource NavigationButton}"
+						Grid.Row="1" Grid.Column="0"
+						Content="Каталог" FontSize="35"
+						Foreground="#FF9001FF" Background="White" BorderBrush="White"
+						Focusable="False"
+						Margin="10,0"
+						VerticalAlignment="Center" VerticalContentAlignment="Top"
+						Click="CatalogueButton_Click"/>
+			
 			<!--<Button x:Name="Main" Style="{StaticResource NavigationButton}" Grid.Column="0" Content="Главная" FontSize="35" Foreground="#FF9001FF" Background="White" Focusable="False" BorderBrush="White" Margin="25,0,0,0" Click="Main_Click"/>
 			<Button x:Name="Books" Style="{StaticResource NavigationButton}" Grid.Column="2" Content="Книги" FontSize="35" Foreground="#FF9001FF" Background="White" Focusable="False" BorderBrush="White" Click="Books_Click"/>-->
 		</Grid>

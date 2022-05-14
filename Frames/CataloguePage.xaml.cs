@@ -39,6 +39,22 @@ namespace LibraryNET6Pages
 			StartFrameAnimation();
 		}
 
+		private void StartFrameAnimation() =>
+			BeginAnimation(OpacityProperty, new DoubleAnimation()
+			{
+				From = 0,
+				To = 1,
+				Duration = TimeSpan.FromSeconds(0.15)
+			});
+
+		public void EndFrameAnimation() =>
+			BeginAnimation(OpacityProperty, new DoubleAnimation()
+			{
+				From = 1,
+				To = 0,
+				Duration = TimeSpan.FromSeconds(0.15)
+			});
+
 		private void DisplayFoundBooks(List<Book> foundBooks, Page page)
 		{
 			var borderList = new List<Border>();
@@ -97,21 +113,29 @@ namespace LibraryNET6Pages
 
 		private async void Main_Click(object sender, RoutedEventArgs e)
 		{
-			EndFrameAnimation();
+			if (Opacity == 1)
+			{
+				EndFrameAnimation();
 
-			await Task.Delay(350);
+				await Task.Delay(350);
 
-			NavigationService.Navigate(new MainFrame());
-		}
-
-		private void SearchTextBox_MouseDown(object sender, MouseButtonEventArgs e)
-		{
-			SearchTextBox.Foreground = new SolidColorBrush(Color.FromRgb(0, 0, 255));
+				try
+				{
+					NavigationService.Navigate(new MainFrame());
+				}
+				catch (NullReferenceException ex) { }
+			}
 		}
 
 		private void SearchTextBox_GotFocus(object sender, RoutedEventArgs e)
 		{
 			SearchWatermark.Visibility = Visibility.Collapsed;
+
+			((TextBox)sender).Background = new SolidColorBrush(Colors.White);
+
+			((TextBox)sender).BorderBrush = new SolidColorBrush(Color.FromRgb(200, 100, 255));
+
+			((TextBox)sender).Foreground = new SolidColorBrush(Color.FromRgb(144, 0, 255));
 		}
 
 		private void SearchTextBox_LostFocus(object sender, RoutedEventArgs e)
@@ -120,7 +144,25 @@ namespace LibraryNET6Pages
 			{
 				SearchWatermark.Visibility = Visibility.Visible;
 			}
+			((TextBox)sender).BorderBrush = new SolidColorBrush(Color.FromRgb(144, 0, 255));
 		}
+
+		private void SearchTextBox_MouseEnter(object sender, MouseEventArgs e)
+		{
+			if (!((TextBox)sender).IsFocused)
+			{
+				((TextBox)sender).Background = new SolidColorBrush(Color.FromRgb(240, 240, 240));
+			}
+		}
+
+		private void SearchTextBox_MouseLeave(object sender, MouseEventArgs e)
+		{
+			if (!((TextBox)sender).IsFocused)
+			{
+				((TextBox)sender).Background = new SolidColorBrush(Colors.White);
+			}
+		}
+
 
 		private void SearchButton_Click(object sender, RoutedEventArgs e)
 		{
@@ -146,33 +188,5 @@ namespace LibraryNET6Pages
 		{
 			SearchImage.Source = new BitmapImage(new Uri(@"/assets/search.png", UriKind.Relative));
 		}
-
-		private void StartFrameAnimation()
-		{
-			/*VerticalAlignment = VerticalAlignment.Center;
-			HorizontalAlignment = HorizontalAlignment.Center;*/
-
-			BeginAnimation(WidthProperty, new DoubleAnimation()
-			{
-				From = 0,
-				To = 800,
-				Duration = TimeSpan.FromSeconds(0.25)
-			});
-		}
-
-			/*BeginAnimation(OpacityProperty, new DoubleAnimation()
-			{
-				From = 0,
-				To = 1,
-				Duration = TimeSpan.FromSeconds(0.25)
-			});*/
-
-		private void EndFrameAnimation() =>
-			BeginAnimation(OpacityProperty, new DoubleAnimation()
-			{
-				From = 1,
-				To = 0,
-				Duration = TimeSpan.FromSeconds(0.15)
-			});
 	}
 }

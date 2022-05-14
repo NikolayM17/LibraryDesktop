@@ -40,6 +40,26 @@
 									</Storyboard>
 								</BeginStoryboard>
 							</EventTrigger>
+
+							<EventTrigger RoutedEvent="PreviewMouseUp">
+								<BeginStoryboard>
+									<Storyboard>
+										<ColorAnimation Storyboard.TargetProperty="Foreground.Color"
+														Duration="0:0:0.1" To="#FF9001FF"/>
+										<ColorAnimation Storyboard.TargetProperty="Background.Color"
+														Duration="0:0:0.1" To="#FFEED9FF"/>
+									</Storyboard>
+								</BeginStoryboard>
+							</EventTrigger>
+
+							<EventTrigger RoutedEvent="MouseEnter">
+								<BeginStoryboard>
+									<Storyboard>
+										<ColorAnimation Storyboard.TargetProperty="Background.Color"
+														Duration="0:0:0.1" To="#FFEED9FF"/>
+									</Storyboard>
+								</BeginStoryboard>
+							</EventTrigger>
 						</ControlTemplate.Triggers>
 					</ControlTemplate>
 				</Setter.Value>
@@ -122,8 +142,7 @@
 					<ControlTemplate TargetType="Button">
 						<Border x:Name="ButtonSearchBorder"
 								BorderThickness="3" BorderBrush="#FF9001FF"
-								CornerRadius="25"
-								RenderOptions.EdgeMode="Aliased"
+								CornerRadius="5"
 								Background="{TemplateBinding Background}">
 							<ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
 						</Border>
@@ -248,10 +267,17 @@
 			<ColumnDefinition/>
 		</Grid.ColumnDefinitions>
 
-		<Label Content="Admin"
+		<Button x:Name="AdminButton" Style="{StaticResource NavigationButton}"
+				Grid.Column="0" Grid.ColumnSpan="2" Grid.RowSpan="2"
+				Content="Admin" FontWeight="Bold" FontSize="35"
+				Foreground="#FF9001FF" Background="White" BorderBrush="White"
+				Focusable="False"
+				Margin="10,10,10,0" Click="AdminButton_Click"/>
+
+		<!--<Label Content="Admin"
 			  FontSize="50" FontWeight="Bold" FontFamily="Century Gothic" Foreground="#FF9001FF"
 			  VerticalContentAlignment="Top" HorizontalContentAlignment="Center"
-			  Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="0" Grid.RowSpan="3"/>
+			  Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="0" Grid.RowSpan="3"/>-->
 
 		<Grid x:Name="Center" Grid.Column="0" Grid.ColumnSpan="10" Grid.Row="2" Grid.RowSpan="13">
 			<Grid.RowDefinitions>
@@ -370,11 +396,12 @@
 					   Click="CreateButton_Click"/>
 			</Border>-->
 
-			<Button x:Name="AdminEnterButton" Style="{StaticResource EnterButtonStyle2}" Content="Create"
+			<Button x:Name="CreateButton" Style="{StaticResource EnterButtonStyle2}" Content="Create"
 					Grid.Row="13" Grid.RowSpan="2" Grid.Column="12" Grid.ColumnSpan="3"
 					FontFamily="Century Gothic" FontSize="25"
+					VerticalAlignment="Center"
 					Background="White" Foreground="#FF9000FF"
-					Margin="-5,-5,5,5"
+					Margin="0,0,5,0"
 					Click="CreateButton_Click"/>
 
 			<!--<Border x:Name="ButtonOpenFileDialogBorder"

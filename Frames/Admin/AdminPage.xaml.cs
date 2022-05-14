@@ -9,6 +9,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
@@ -28,14 +29,28 @@ namespace LibraryNET6Pages
 
 			_librarydb = new MsSqlController(this.GetType());
 
-			/*MessageBox.Show(_librarydb.User);*/
-
-			/*var allBooks = new MsSqlController().AllBooks;*/
-
 			SearchResultsStackPanel.Children.Clear();
 
 			DisplayFoundBooks(_librarydb.AllBooks, this);
+
+			StartFrameAnimation();
 		}
+
+		private void StartFrameAnimation() =>
+			BeginAnimation(OpacityProperty, new DoubleAnimation()
+			{
+				From = 0,
+				To = 1,
+				Duration = TimeSpan.FromSeconds(0.15)
+			});
+
+		public void EndFrameAnimation() =>
+			BeginAnimation(OpacityProperty, new DoubleAnimation()
+			{
+				From = 1,
+				To = 0,
+				Duration = TimeSpan.FromSeconds(0.15)
+			});
 
 		private void DisplayFoundBooks(List<Book> foundBooks, Page page)
 		{
@@ -95,68 +110,15 @@ namespace LibraryNET6Pages
 			}
 		}
 
-		private void Main_Click(object sender, RoutedEventArgs e)
-		{
-			NavigationService.Navigate(new MainFrame());
-		}
-
-		private void AddBook_Click(object sender, RoutedEventArgs e)
-		{
-			NavigationService.Navigate(new AddBookPage());
-
-
-
-			/*new SqliteController().ExecuteCommand(new SqliteCommand(
-				"INSERT INTO books (name, author, genre, description, year)" +
-				"VALUES('Гарри Поттер и философский камень'," +
-				"'Дж. К. Роулинг',"+
-				"'Зарубежное фэнтези'," +
-				"'Гарри Поттер ни разу даже не слышал о «Хогварце», но на дверной коврик дома номер четыре по Бирючинной улице начинают падать письма. Адрес написан зелеными чернилами на желтоватом пергаменте, а конверт скрепляет лиловая печать. Однако письма тут же конфисковывают тетя и дядя мальчика, имеющие на редкость скверный характер. Потом, на одиннадцатый день рождения Гарри, в дом врывается гигант по имени Рубеус Огрид с невероятными новостями: Гарри Поттер – волшебник, и его ждет место в школе колдовства и ведьминских искусств «Хогварц». Потрясающие приключения начинаются!'," +
-				"1997)"
-				));*/
-		}
-
-		private void DeleteBook_Click(object sender, RoutedEventArgs e)
-		{
-			/*new SqliteController().ExecuteCommand(new SqliteCommand(
-				"DELETE FROM books " +
-				"WHERE books.id == 1"
-				));*/
-		}
-
-		private void EditBook_Click(object sender, RoutedEventArgs e)
-		{
-			/*new SqliteController().ExecuteCommand(new SqliteCommand(
-				"UPDATE books " +
-				"SET year = 2000 " +
-				"WHERE year == 2017"
-			));*/
-		}
-
-		private void EditBook_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
-		{
-
-		}
-
-		private void EditBook_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
-		{
-
-		}
-
-		private void ContextMenu_MouseEnter(object sender, MouseEventArgs e)
-		{
-			/*((MenuItem)((ContextMenu)sender).Items[((ContextMenu)sender).Items.Count - 1]).Background = new SolidColorBrush(Colors.White);*/
-		}
-
-
-		private void SearchTextBox_MouseDown(object sender, MouseButtonEventArgs e)
-		{
-			SearchTextBox.Foreground = new SolidColorBrush(Color.FromRgb(0, 0, 255));
-		}
-
 		private void SearchTextBox_GotFocus(object sender, RoutedEventArgs e)
 		{
 			SearchWatermark.Visibility = Visibility.Collapsed;
+
+			((TextBox)sender).Background = new SolidColorBrush(Colors.White);
+
+			((TextBox)sender).BorderBrush = new SolidColorBrush(Color.FromRgb(200, 100, 255));
+
+			((TextBox)sender).Foreground = new SolidColorBrush(Color.FromRgb(144, 0, 255));
 		}
 
 		private void SearchTextBox_LostFocus(object sender, RoutedEventArgs e)
@@ -164,6 +126,23 @@ namespace LibraryNET6Pages
 			if (((TextBox)sender).Text.Length == 0)
 			{
 				SearchWatermark.Visibility = Visibility.Visible;
+			}
+			((TextBox)sender).BorderBrush = new SolidColorBrush(Color.FromRgb(144, 0, 255));
+		}
+
+		private void SearchTextBox_MouseEnter(object sender, MouseEventArgs e)
+		{
+			if (!((TextBox)sender).IsFocused)
+			{
+				((TextBox)sender).Background = new SolidColorBrush(Color.FromRgb(240, 240, 240));
+			}
+		}
+
+		private void SearchTextBox_MouseLeave(object sender, MouseEventArgs e)
+		{
+			if (!((TextBox)sender).IsFocused)
+			{
+				((TextBox)sender).Background = new SolidColorBrush(Colors.White);
 			}
 		}
 
@@ -197,13 +176,35 @@ namespace LibraryNET6Pages
 		private void AddBookButton_PreviewMouseDown(object sender, MouseButtonEventArgs e)
 		{
 			AddBookImage.Source = new BitmapImage(new Uri(@"/assets/add_icon_pressed.png", UriKind.Relative));
-
-			NavigationService.Navigate(new AddBookPage());
 		}
 
 		private void AddBookButton_PreviewMouseUp(object sender, MouseButtonEventArgs e)
 		{
 			AddBookImage.Source = new BitmapImage(new Uri(@"/assets/add_icon.png", UriKind.Relative));
+		}
+
+		private async void AddBookButton_Click(object sender, RoutedEventArgs e)
+		{
+			if (Opacity == 1)
+			{
+				EndFrameAnimation();
+
+				await Task.Delay(350);
+
+				NavigationService.Navigate(new AddBookPage());
+			}
+		}
+
+		private async void MainButton_Click(object sender, RoutedEventArgs e)
+		{
+			if (Opacity == 1)
+			{
+				EndFrameAnimation();
+
+				await Task.Delay(350);
+
+				NavigationService.Navigate(new MainFrame());
+			}
 		}
 	}
 }

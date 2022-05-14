@@ -11,6 +11,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
@@ -37,16 +38,34 @@ namespace LibraryNET6Pages
 			YearTextBox.Text = book.Date.ToString();
 			DescriptionTextBox.Text = book.Description;
 
-			BookImage.Source = ImageConverter.Convert.ByteArrayToWpfImage(
+			BookImage.Source = ImageController.Convert.ByteArrayToWpfImage(
 				Convert.FromBase64String(book.Image)
 				).Source;
 
 			TitleWaterMark.Visibility = TitleTextBox.Text.Length == 0 ? Visibility.Visible : Visibility.Hidden;
 			DescriptionWatermark.Visibility = DescriptionTextBox.Text.Length == 0 ? Visibility.Visible : Visibility.Hidden;
 
+			StartFrameAnimation();
+
 			/*GenreCb.ItemsSource = new MsSqlController().GenreList;*/
 				/*new string[] { "Genre1", "Genre2", "Genre7" };*/
 		}
+
+		private void StartFrameAnimation() =>
+			BeginAnimation(OpacityProperty, new DoubleAnimation()
+			{
+				From = 0,
+				To = 1,
+				Duration = TimeSpan.FromSeconds(0.15)
+			});
+
+		private void EndFrameAnimation() =>
+			BeginAnimation(OpacityProperty, new DoubleAnimation()
+			{
+				From = 1,
+				To = 0,
+				Duration = TimeSpan.FromSeconds(0.15)
+			});
 
 		private void OpenFileDialogButton_Click(object sender, RoutedEventArgs e)
 		{
@@ -100,7 +119,7 @@ namespace LibraryNET6Pages
 				AuthorTextBox.Text,
 				GenreTextBox.Text,
 				DescriptionTextBox.Text,
-				ImageConverter.Convert.WpfImageToByteArray(BookImage),
+				ImageController.Convert.WpfImageToByteArray(BookImage),
 				short.Parse(YearTextBox.Text)));
 
 			if (!(message is null))
@@ -131,6 +150,18 @@ namespace LibraryNET6Pages
 			var childWindow = new StudentsListWindow(_id);
 
 			childWindow.ShowDialog();
+		}
+
+		private async void AdminButton_Click(object sender, RoutedEventArgs e)
+		{
+			if (Opacity == 1)
+			{
+				EndFrameAnimation();
+
+				await Task.Delay(350);
+
+				NavigationService.Navigate(new AdminPage());
+			}
 		}
 	}
 }

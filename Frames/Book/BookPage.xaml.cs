@@ -9,6 +9,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
@@ -22,8 +23,6 @@ namespace LibraryNET6Pages
 	{
 		private readonly Page _pageSender;
 
-		public BookPage() { }
-
 		public BookPage(Book book, Page pageSender)
 		{
 			InitializeComponent();
@@ -36,30 +35,39 @@ namespace LibraryNET6Pages
 			YearLabel.Content = book.Date;
 			DescriptionTextBlock.Text = book.Description;
 
-			BookImage.Source = ImageConverter.Convert.ByteArrayToWpfImage(
+			BookImage.Source = ImageController.Convert.ByteArrayToWpfImage(
 				Convert.FromBase64String(book.Image)
 				).Source;
+
+			StartFrameAnimation();
 		}
 
-		private void Main_Click(object sender, RoutedEventArgs e)
+		private void StartFrameAnimation() =>
+			BeginAnimation(OpacityProperty, new DoubleAnimation()
+			{
+				From = 0,
+				To = 1,
+				Duration = TimeSpan.FromSeconds(0.15)
+			});
+
+		private void EndFrameAnimation() =>
+			BeginAnimation(OpacityProperty, new DoubleAnimation()
+			{
+				From = 1,
+				To = 0,
+				Duration = TimeSpan.FromSeconds(0.15)
+			});
+
+		private async void CatalogueButton_Click(object sender, RoutedEventArgs e)
 		{
-			NavigationService.Navigate(new MainFrame());
-		}
+			if (Opacity == 1)
+			{
+				EndFrameAnimation();
 
-		private void OpenCatalogue(object sender, RoutedEventArgs e)
-		{
-			NavigationService.Navigate(new CataloguePage());
-		}
+				await Task.Delay(350);
 
-		private void Genres_Click(object sender, RoutedEventArgs e)
-			=> OpenCatalogue(sender, e);
-
-		private void Authors_Click(object sender, RoutedEventArgs e)
-			=> OpenCatalogue(sender, e);
-
-		private void Books_Click(object sender, RoutedEventArgs e)
-		{
-			NavigationService.Navigate(new CataloguePage());
+				NavigationService.Navigate(new CataloguePage());
+			}
 		}
 	}
 }

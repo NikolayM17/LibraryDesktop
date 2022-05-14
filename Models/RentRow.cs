@@ -1,17 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LibraryNET6Pages
 {
 	public class RentRow
 	{
-		public string Student { get; set; }
-		public DateTime? RentDate { get; set; }
-		public DateTime? Deadline { get; set; }
-		public DateTime? ReturnDate { get; set; }
-		public bool IsDeadlineFailed { get; set; }
+		private string _student;
+		private DateTime? _rentDate;
+		private DateTime? _deadline;
+		private DateTime? _returnDate;
+		private bool _idDeadlineFailed;
+
+		public string Student { get => _student; set => _student = value; }
+		public DateTime? RentDate { get => _rentDate; set => _rentDate = value; }
+		public DateTime? Deadline { get => _deadline; set => _deadline = value; }
+		public DateTime? ReturnDate { get => _returnDate; set => _returnDate = value; }
+		public bool IsDeadlineFailed { get => _idDeadlineFailed; set => _idDeadlineFailed = value; }
 	}
 }
