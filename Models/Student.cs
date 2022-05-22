@@ -2,13 +2,15 @@
 {
 	public class Student
 	{
-		private readonly int _id;
+		private int _id;
 		private string _name;
 		private int _failedDeadlines;
 
 		public int Id { get => _id; }
-		public string Name { get => _name; set => _name = value; }
-		public int FailedDeadlines { get => _failedDeadlines; set => _failedDeadlines = value; }
+		public string Name { get => _name; }
+		public int FailedDeadlines { get => _failedDeadlines; }
+
+		public Student() { }
 
 		public Student(int id, string name, int failed_deadlines)
 		{

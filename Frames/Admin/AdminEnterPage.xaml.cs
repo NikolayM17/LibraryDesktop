@@ -119,15 +119,18 @@ namespace LibraryNET6Pages
 
 		private async void AdminEnterButton_Click(object sender, RoutedEventArgs e)
 		{
-			var isEnterDataCorrect = MsSqlController.IsEnterDataCorrect(LoginTextBox.Text, PasswordTextBox.Password);
+			var isEnterDataCorrect = MsSqlController<Page>.IsEnterDataCorrect(LoginTextBox.Text, PasswordTextBox.Password);
 
 			if (isEnterDataCorrect.Item1 && isEnterDataCorrect.Item2)
 			{
-				EndFrameAnimation();
+				if (Opacity == 1)
+				{
+					EndFrameAnimation();
 
-				await Task.Delay(150);
+					await Task.Delay(150);
 
-				NavigationService.Navigate(new AdminPage());
+					NavigationService.Navigate(new AdminPage());
+				}
 			}
 			else if (isEnterDataCorrect.Item1)
 			{
@@ -136,10 +139,6 @@ namespace LibraryNET6Pages
 			else if (isEnterDataCorrect.Item2)
 			{
 				MessageBox.Show("Irregular Login");
-			}
-			else
-			{
-				MessageBox.Show("Irregular Login or Password");
 			}
 		}
 

@@ -34,10 +34,21 @@ namespace LibraryNET6Pages
 			GenreLabel.Content = book.Genre;
 			YearLabel.Content = book.Date;
 			DescriptionTextBlock.Text = book.Description;
+			MaxCountLabel.Content = book.MaxCount;
+			BarcodeLabel.Content = book.Barcode;
 
-			BookImage.Source = ImageController.Convert.ByteArrayToWpfImage(
+			RectangleImageBrush.ImageSource = (BitmapImage)ImageController.Convert.ByteArrayToWpfImage(
 				Convert.FromBase64String(book.Image)
 				).Source;
+
+			BarcodeLabel.ToolTip = new ToolTip()
+			{
+				Content = book.Barcode,
+				Background = new SolidColorBrush(Color.FromArgb(75, 144, 0, 255)),
+				Foreground = new SolidColorBrush(Colors.White),
+				FontFamily = new FontFamily("Century Gothic"),
+				FontSize = 15
+			};
 
 			StartFrameAnimation();
 		}

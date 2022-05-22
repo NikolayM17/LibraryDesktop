@@ -60,6 +60,15 @@
 									</Storyboard>
 								</BeginStoryboard>
 							</EventTrigger>
+
+							<EventTrigger RoutedEvent="MouseLeave">
+								<BeginStoryboard>
+									<Storyboard>
+										<ColorAnimation Storyboard.TargetProperty="Background.Color"
+														Duration="0:0:0.1" To="White"/>
+									</Storyboard>
+								</BeginStoryboard>
+							</EventTrigger>
 						</ControlTemplate.Triggers>
 					</ControlTemplate>
 				</Setter.Value>
@@ -291,8 +300,41 @@
 						<Border x:Name="border"
 								BorderBrush="#FF9001FF" BorderThickness="0,0,0,1"
 								Background="{TemplateBinding Background}"
+								Margin="0,0,-25,0"
+								Padding="0,0,0,3"
+								SnapsToDevicePixels="True">
+							<ScrollViewer x:Name="PART_ContentHost" Focusable="False" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden"/>
+						</Border>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
+		<Style TargetType="{x:Type TextBox}" x:Key="type3">
+			<Setter Property="HorizontalContentAlignment" Value="Center"/>
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="{x:Type TextBoxBase}">
+						<Border x:Name="border"
+								BorderBrush="#FF9001FF" BorderThickness="0,0,0,1"
+								Background="{TemplateBinding Background}"
+								Padding="0,0,0,3"
+								SnapsToDevicePixels="True">
+							<ScrollViewer x:Name="PART_ContentHost" Focusable="False" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden"/>
+						</Border>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
+		<Style TargetType="{x:Type TextBox}" x:Key="type4">
+			<Setter Property="HorizontalContentAlignment" Value="Center"/>
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="{x:Type TextBoxBase}">
+						<Border x:Name="border"
+								BorderBrush="#FF9001FF" BorderThickness="0,0,0,1"
+								Background="{TemplateBinding Background}"
 								SnapsToDevicePixels="True"
-								Margin="0,0,-25,0">
+								Margin="-25,0">
 							<ScrollViewer x:Name="PART_ContentHost" Focusable="False" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden"/>
 						</Border>
 					</ControlTemplate>
@@ -375,7 +417,21 @@
 				<ColumnDefinition/>
 			</Grid.ColumnDefinitions>
 
+			<Rectangle
+				Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="3" Grid.RowSpan="10"
+				RadiusX="7" RadiusY="7"
+				Stroke="#FF9001FF" StrokeThickness="3"
+				MouseDown="Rectangle_MouseDown"
+				>
+				<Rectangle.Fill>
+					<ImageBrush x:Name="openFdRectangleImageBrush"
+								ImageSource="/Frames/Book/icon.png"
+								Stretch="Uniform" />
+				</Rectangle.Fill>
+			</Rectangle>
+
 			<Border x:Name="ImageBorder"
+					Visibility="Hidden"
 					BorderThickness="1" BorderBrush="#FF9001FF"
 					Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="3" Grid.RowSpan="10">
 				<Button x:Name="OpenFileDialogButton" Style="{StaticResource EnterButtonStyle}"
@@ -435,6 +491,36 @@
 					 HorizontalAlignment="Left" VerticalContentAlignment="Bottom" HorizontalContentAlignment="Left"
 					 BorderThickness="0,0,0,1" BorderBrush="#FF9001FF"/>
 
+			<Label Content="В наличии:"
+				   FontSize="20" FontFamily="Century Gothic" Foreground="#FF9001FF"
+				   VerticalContentAlignment="Bottom" HorizontalContentAlignment="Right"
+				   Grid.Column="12" Grid.ColumnSpan="3" Grid.Row="3" Grid.RowSpan="2"/>
+
+			<TextBox x:Name="MaxCountTextBox" Style="{StaticResource type3}"
+				   FontSize="20" FontFamily="Century Gothic"
+				   HorizontalAlignment="Stretch"
+				   VerticalContentAlignment="Bottom"
+				   Grid.Column="13" Grid.ColumnSpan="1" Grid.Row="5" Grid.RowSpan="2"
+				   BorderThickness="0,0,0,1" BorderBrush="#FF9001FF"/>
+
+			<Label Content="шт."
+				   FontSize="20" FontFamily="Century Gothic" Foreground="#FF9001FF"
+				   VerticalContentAlignment="Bottom" HorizontalContentAlignment="Right"
+				   Grid.Column="14" Grid.ColumnSpan="1" Grid.Row="5" Grid.RowSpan="2"/>
+
+			<TextBox x:Name="BarcodeTextBox" Style="{StaticResource type4}"
+					 FontSize="20" FontFamily="Century Gothic"
+					 Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="13" Grid.RowSpan="2"
+					 HorizontalAlignment="Center" VerticalAlignment="Center"
+					 HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+					 BorderThickness="0,0,0,1" BorderBrush="#FF9001FF"
+					 GotFocus="BarcodeTextBox_GotFocus" LostFocus="BarcodeTextBox_LostFocus"/>
+			<TextBlock x:Name="BarcodeWaterMark" Text="Код"
+					   Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="13" Grid.RowSpan="2"
+					   FontSize="20" FontFamily="Century Gothic" Foreground="#FFC8C8FF"
+					   IsHitTestVisible="False"
+					   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
 			<Border Grid.Column="5" Grid.ColumnSpan="7" Grid.Row="10" Grid.RowSpan="3"
 					BorderThickness="2" BorderBrush="#FF9001FF"
 					Margin="-1" Padding="3" CornerRadius="10">
@@ -455,6 +541,7 @@
 			</Border>
 
 			<Button x:Name="OpenPdfButton" Style="{StaticResource OpenPdfButtonStyle}" Content="Pdf"
+					Visibility="Hidden"
 					Grid.Row="13" Grid.RowSpan="2" Grid.Column="1" Grid.ColumnSpan="3"
 					FontFamily="Century Gothic" FontSize="25"
 					VerticalAlignment="Center"

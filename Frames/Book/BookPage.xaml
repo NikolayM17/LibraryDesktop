@@ -19,7 +19,7 @@
 							<ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
 						</Border>
 						<ControlTemplate.Triggers>
-							<EventTrigger RoutedEvent="MouseEnter">
+							<EventTrigger RoutedEvent="PreviewMouseDown">
 								<BeginStoryboard>
 									<Storyboard>
 										<ColorAnimation Storyboard.TargetProperty="Foreground.Color"
@@ -30,11 +30,29 @@
 								</BeginStoryboard>
 							</EventTrigger>
 
-							<EventTrigger RoutedEvent="MouseLeave">
+							<EventTrigger RoutedEvent="PreviewMouseUp">
 								<BeginStoryboard>
 									<Storyboard>
 										<ColorAnimation Storyboard.TargetProperty="Foreground.Color"
 													 Duration="0:0:0.1" To="#FF9001FF"/>
+										<ColorAnimation Storyboard.TargetProperty="Background.Color"
+														Duration="0:0:0.1" To="White"/>
+									</Storyboard>
+								</BeginStoryboard>
+							</EventTrigger>
+
+							<EventTrigger RoutedEvent="MouseEnter">
+								<BeginStoryboard>
+									<Storyboard>
+										<ColorAnimation Storyboard.TargetProperty="Background.Color"
+														Duration="0:0:0.1" To="#FFEED9FF"/>
+									</Storyboard>
+								</BeginStoryboard>
+							</EventTrigger>
+
+							<EventTrigger RoutedEvent="MouseLeave">
+								<BeginStoryboard>
+									<Storyboard>
 										<ColorAnimation Storyboard.TargetProperty="Background.Color"
 														Duration="0:0:0.1" To="White"/>
 									</Storyboard>
@@ -46,6 +64,7 @@
 			</Setter>
 		</Style>
 	</Page.Resources>
+	
 	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition/>
@@ -134,7 +153,22 @@
 				<ColumnDefinition/>
 			</Grid.ColumnDefinitions>
 
-			<Border x:Name="ImageBorder" BorderThickness="1" BorderBrush="#FF9001FF" Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="3" Grid.RowSpan="10">
+			<Rectangle
+				Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="3" Grid.RowSpan="10"
+				RadiusX="7" RadiusY="7"
+				Stroke="#FF9001FF" StrokeThickness="3"
+				>
+				<Rectangle.Fill>
+					<ImageBrush x:Name="RectangleImageBrush"
+								ImageSource="/Frames/Book/icon.png"
+								Stretch="Uniform" />
+				</Rectangle.Fill>
+			</Rectangle>
+
+			<Border x:Name="ImageBorder"
+					Visibility="Hidden"
+					BorderThickness="1" BorderBrush="#FF9001FF"
+					Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="3" Grid.RowSpan="10">
 				<Image x:Name="BookImage" Stretch="UniformToFill"/>
 			</Border>
 
@@ -149,7 +183,7 @@
 			<Label x:Name="AuthorLabel"  FontSize="20" FontFamily="Century Gothic"
 				  HorizontalAlignment="Left"
 				  VerticalContentAlignment="Bottom" HorizontalContentAlignment="Stretch"
-				  Grid.Column="6" Grid.ColumnSpan="7" Grid.Row="3" Grid.RowSpan="2"
+				  Grid.Column="6" Grid.ColumnSpan="6" Grid.Row="3" Grid.RowSpan="2"
 				  BorderThickness="0,0,0,1" BorderBrush="#FF9001FF"/>
 
 			<Label Content="Жанр:" FontSize="20" FontFamily="Century Gothic" Foreground="#FF9001FF"
@@ -159,7 +193,7 @@
 			<Label x:Name="GenreLabel" FontSize="20" FontFamily="Century Gothic"
 				  HorizontalAlignment="Left"
 				  VerticalContentAlignment="Bottom" HorizontalContentAlignment="Left"
-				  Grid.Column="6" Grid.ColumnSpan="7" Grid.Row="5" Grid.RowSpan="2"
+				  Grid.Column="6" Grid.ColumnSpan="6" Grid.Row="5" Grid.RowSpan="2"
 				  BorderThickness="0,0,0,1" BorderBrush="#FF9001FF"/>
 
 			<Label Content="Год:" FontSize="20" FontFamily="Century Gothic" Foreground="#FF9001FF"
@@ -169,8 +203,32 @@
 			<Label x:Name="YearLabel" FontSize="20" FontFamily="Century Gothic"
 				  HorizontalAlignment="Left"
 				  VerticalContentAlignment="Bottom" HorizontalContentAlignment="Left"
-				  Grid.Column="6" Grid.ColumnSpan="7" Grid.Row="7" Grid.RowSpan="2"
+				  Grid.Column="6" Grid.ColumnSpan="6" Grid.Row="7" Grid.RowSpan="2"
 				  BorderThickness="0,0,0,1" BorderBrush="#FF9001FF"/>
+
+			<Label Content="В наличии:"
+				   FontSize="20" FontFamily="Century Gothic" Foreground="#FF9001FF"
+				   VerticalContentAlignment="Bottom" HorizontalContentAlignment="Right"
+				   Grid.Column="12" Grid.ColumnSpan="3" Grid.Row="3" Grid.RowSpan="2"/>
+
+			<Label x:Name="MaxCountLabel"
+				   FontSize="20" FontFamily="Century Gothic"
+				   HorizontalAlignment="Left"
+				   VerticalContentAlignment="Bottom" HorizontalContentAlignment="Right"
+				   Grid.Column="13" Grid.ColumnSpan="1" Grid.Row="5" Grid.RowSpan="2"
+				   BorderThickness="0,0,0,1" BorderBrush="#FF9001FF"/>
+
+			<Label Content="шт."
+				   FontSize="20" FontFamily="Century Gothic" Foreground="#FF9001FF"
+				   VerticalContentAlignment="Bottom" HorizontalContentAlignment="Right"
+				   Grid.Column="14" Grid.ColumnSpan="1" Grid.Row="5" Grid.RowSpan="2"/>
+
+			<Label x:Name="BarcodeLabel"
+				   FontSize="20" FontFamily="Century Gothic"
+				   Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="13" Grid.RowSpan="2"
+				   HorizontalAlignment="Center" VerticalAlignment="Center"
+				   HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+				   BorderThickness="0,0,0,1" BorderBrush="#FF9001FF"/>
 
 			<ScrollViewer Grid.Column="5" Grid.ColumnSpan="9" Grid.Row="10" Grid.RowSpan="3" VerticalScrollBarVisibility="Hidden">
 				<TextBlock x:Name="DescriptionTextBlock" FontSize="15" FontFamily="Century Gothic" TextWrapping="Wrap"/>

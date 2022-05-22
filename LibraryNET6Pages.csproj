@@ -13,6 +13,7 @@
     <None Remove="assets\Icon.png" />
     <None Remove="assets\search.png" />
     <None Remove="assets\search_pressed.png" />
+    <None Remove="Frames\Book\icon.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -26,6 +27,7 @@
     <Resource Include="assets\Icon.png" />
     <Resource Include="assets\search.png" />
     <Resource Include="assets\search_pressed.png" />
+    <Resource Include="Frames\Book\icon.png" />
   </ItemGroup>
 
 </Project>

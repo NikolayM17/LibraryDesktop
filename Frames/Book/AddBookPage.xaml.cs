@@ -49,23 +49,86 @@ namespace LibraryNET6Pages
 
 		private void CreateButton_Click(object sender, RoutedEventArgs e)
 		{
-			var message = new MsSqlController().AddBook(new Book(
-				0,
-				TitleTextBox.Text,
-				AuthorTextBox.Text,
-				GenreTextBox.Text,
-				DescriptionTextBox.Text,
-				ImageController.Convert.WpfImageToByteArray(BookImage),
-				short.Parse(YearTextBox.Text)));
-
-			if (!(message is null))
+			if (IsBookFilled())
 			{
-				MessageBox.Show(message);
+				var message = new MsSqlController<AdminPage>().AddBook(new Book(
+					0,
+					TitleTextBox.Text,
+					AuthorTextBox.Text,
+					GenreTextBox.Text,
+					DescriptionTextBox.Text,
+					/*ImageController.Convert.WpfImageToByteArray(BookImage),*/
+					ImageController.Convert.WpfImageToByteArray(new Image()
+					{
+						Source = openFdRectangleImageBrush.ImageSource
+					}),
+					short.Parse(YearTextBox.Text.Length == 0 ? "-1" : YearTextBox.Text),
+					int.Parse(MaxCountTextBox.Text.Length == 0 ? "-1" : MaxCountTextBox.Text),
+					long.Parse(BarcodeTextBox.Text.Length == 0 ? "-1" : BarcodeTextBox.Text)));
+
+				MessageBox.Show(message is not null ? message : "Done");
+			}
+		}
+
+		private bool IsBookFilled()
+		{
+			bool titleIsReady = false;
+			bool authorIsReady = false;
+			bool genreIsReady = false;
+			bool dateIsReady = false;
+			bool descriptionIsReady = false;
+			bool countIsReady = false;
+
+			if (TitleTextBox.Text.Length == 0)
+			{
+				MessageBox.Show("Введите название книги");
 			}
 			else
 			{
-				MessageBox.Show("Done");
+				titleIsReady = true;
+
+				if (AuthorTextBox.Text.Length == 0)
+				{
+					if (MessageBox.Show("Введите автора книги", "", MessageBoxButton.YesNo) == MessageBoxResult.No)
+					{
+						authorIsReady = true;
+
+						if (GenreTextBox.Text.Length == 0)
+						{
+							if (MessageBox.Show("Введите жанр книги", "", MessageBoxButton.YesNo) == MessageBoxResult.No)
+							{
+								genreIsReady = true;
+
+								if (YearTextBox.Text.Length == 0)
+								{
+									if (MessageBox.Show("Введите дату выпуска книги", "", MessageBoxButton.YesNo) == MessageBoxResult.No)
+									{
+										dateIsReady = true;
+
+										if (DescriptionTextBox.Text.Length == 0)
+										{
+											if (MessageBox.Show("Введите описание книги", "", MessageBoxButton.YesNo) == MessageBoxResult.No)
+											{
+												descriptionIsReady = true;
+
+												if (MaxCountTextBox.Text.Length == 0)
+												{
+													if (MessageBox.Show("Введите количество оставшихся экземпляров", "", MessageBoxButton.YesNo) == MessageBoxResult.No)
+													{
+														countIsReady = true;
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
 			}
+			
+			return titleIsReady && authorIsReady && genreIsReady && dateIsReady && descriptionIsReady && countIsReady;
 		}
 
 		private void OpenFileDialogButton_Click(object sender, RoutedEventArgs e)
@@ -79,8 +142,6 @@ namespace LibraryNET6Pages
 
 			if (fileDialog.ShowDialog() == true)
 			{
-				/*_bookImage = File.ReadAllBytes(fileDialog.FileName);*/
-
 				BookImage.Source = new BitmapImage(new Uri(fileDialog.FileName));
 				BookImage.Stretch = System.Windows.Media.Stretch.Fill;
 			}
@@ -121,6 +182,40 @@ namespace LibraryNET6Pages
 				await Task.Delay(350);
 
 				NavigationService.Navigate(new AdminPage());
+			}
+		}
+
+		private void Rectangle_MouseDown(object sender, MouseButtonEventArgs e)
+		{
+			OpenFileDialog fileDialog = new OpenFileDialog();
+
+			fileDialog.Title = "Select a picture";
+			fileDialog.Filter = "All supported graphics|*.jpg;*.jpeg;*.png|" +
+			  "JPEG (*.jpg;*.jpeg)|*.jpg;*.jpeg|" +
+			  "Portable Network Graphic (*.png)|*.png";
+
+			if (fileDialog.ShowDialog() == true)
+			{
+				openFdRectangleImageBrush.ImageSource = new BitmapImage(new Uri(fileDialog.FileName));
+				openFdRectangleImageBrush.Stretch = System.Windows.Media.Stretch.Fill;
+
+				var img = new Image()
+				{
+					Source = (BitmapImage)openFdRectangleImageBrush.ImageSource
+				};
+			}
+		}
+
+		private void BarcodeTextBox_GotFocus(object sender, RoutedEventArgs e)
+		{
+			BarcodeWaterMark.Visibility = Visibility.Hidden;
+		}
+
+		private void BarcodeTextBox_LostFocus(object sender, RoutedEventArgs e)
+		{
+			if (BarcodeTextBox.Text.Length == 0)
+			{
+				BarcodeWaterMark.Visibility = Visibility.Visible;
 			}
 		}
 	}

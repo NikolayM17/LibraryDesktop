@@ -21,13 +21,13 @@ namespace LibraryNET6Pages
 	/// </summary>
 	public partial class AdminPage : Page
 	{
-		private MsSqlController _librarydb;
+		private MsSqlController<AdminPage> _librarydb;
 
 		public AdminPage()
 		{
 			InitializeComponent();
 
-			_librarydb = new MsSqlController(this.GetType());
+			_librarydb = new();
 
 			SearchResultsStackPanel.Children.Clear();
 
@@ -35,7 +35,7 @@ namespace LibraryNET6Pages
 
 			StartFrameAnimation();
 		}
-
+		
 		private void StartFrameAnimation() =>
 			BeginAnimation(OpacityProperty, new DoubleAnimation()
 			{
@@ -54,9 +54,9 @@ namespace LibraryNET6Pages
 
 		private void DisplayFoundBooks(List<Book> foundBooks, Page page)
 		{
-			var borderList = new List<Border>();
+			var borderList = new List<Rectangle>();
 
-			var listBorderLists = new List<List<Border>>();
+			var listBorderLists = new List<List<Rectangle>>();
 
 			var gridBooks = new List<Book>();
 
@@ -86,14 +86,14 @@ namespace LibraryNET6Pages
 
 					var newBorder = gridController.CreateBorder(foundBooks.IndexOf(book));
 
-					borderList.Add(gridController.FillBorder(
-						gridController.CreateBorder(
+					borderList.Add(gridController.FillRectangle(
+						gridController.CreateRectangle(
 							fourBooks.IndexOf(book)), book));
 				}
 
 				listBorderLists.Add(borderList);
 
-				borderList = new List<Border>();
+				borderList = new List<Rectangle>();
 			}
 
 			foreach (var fourBorders in listBorderLists)
@@ -116,6 +116,8 @@ namespace LibraryNET6Pages
 
 			((TextBox)sender).Background = new SolidColorBrush(Colors.White);
 
+			((TextBox)sender).BorderBrush = new SolidColorBrush(Color.FromArgb(75, 144, 100, 255));
+
 			((TextBox)sender).BorderBrush = new SolidColorBrush(Color.FromRgb(200, 100, 255));
 
 			((TextBox)sender).Foreground = new SolidColorBrush(Color.FromRgb(144, 0, 255));
@@ -127,6 +129,7 @@ namespace LibraryNET6Pages
 			{
 				SearchWatermark.Visibility = Visibility.Visible;
 			}
+
 			((TextBox)sender).BorderBrush = new SolidColorBrush(Color.FromRgb(144, 0, 255));
 		}
 
@@ -148,8 +151,6 @@ namespace LibraryNET6Pages
 
 		private void SearchButton_Click(object sender, RoutedEventArgs e)
 		{
-			/*var foundBooks = new MsSqlController().GetFoundBooks(SearchTextBox.Text);*/
-
 			SearchResultsStackPanel.Children.Clear();
 
 			DisplayFoundBooks(_librarydb.GetFoundBooks(SearchTextBox.Text), this);
@@ -165,12 +166,12 @@ namespace LibraryNET6Pages
 
 		private void SearchButton_PreviewMouseDown(object sender, MouseButtonEventArgs e)
 		{
-			SearchImage.Source = new BitmapImage(new Uri(@"/assets/search_pressed.png", UriKind.Relative));
+			SearchImage.Source = new BitmapImage(new Uri(@"/assets/search.png", UriKind.Relative));
 		}
 
 		private void SearchButton_PreviewMouseUp(object sender, MouseButtonEventArgs e)
 		{
-			SearchImage.Source = new BitmapImage(new Uri(@"/assets/search.png", UriKind.Relative));
+			SearchImage.Source = new BitmapImage(new Uri(@"/assets/search_pressed.png", UriKind.Relative));
 		}
 
 		private void AddBookButton_PreviewMouseDown(object sender, MouseButtonEventArgs e)
@@ -205,6 +206,29 @@ namespace LibraryNET6Pages
 
 				NavigationService.Navigate(new MainFrame());
 			}
+		}
+
+		private void SearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
+		{
+			SearchResultsStackPanel.Children.Clear();
+
+			DisplayFoundBooks(_librarydb.GetFoundBooks(SearchTextBox.Text), this);
+
+			SearchResultsStackPanel.BeginAnimation(OpacityProperty, new DoubleAnimation()
+			{
+				From = 0,
+				To = 1,
+				Duration = TimeSpan.FromSeconds(0.75)
+			});
+		}
+
+		public void UpdateSearchResults()
+		{
+			_librarydb.UpdateBookList();
+
+			SearchResultsStackPanel.Children.Clear();
+
+			DisplayFoundBooks(_librarydb.GetFoundBooks(SearchTextBox.Text), this);
 		}
 	}
 }

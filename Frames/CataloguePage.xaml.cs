@@ -22,13 +22,13 @@ namespace LibraryNET6Pages
 	/// </summary>
 	public partial class CataloguePage : Page
 	{
-		private MsSqlController _librarydb;
+		private MsSqlController<CataloguePage> _librarydb;
 
 		public CataloguePage()
 		{
 			InitializeComponent();
 
-			_librarydb = new MsSqlController();
+			_librarydb = new();
 
 			/*MessageBox.Show(_librarydb.User);*/
 
@@ -57,9 +57,13 @@ namespace LibraryNET6Pages
 
 		private void DisplayFoundBooks(List<Book> foundBooks, Page page)
 		{
-			var borderList = new List<Border>();
+			/*var borderList = new List<Border>();
 
-			var listGridBorders = new List<List<Border>>();
+			var listGridBorders = new List<List<Border>>();*/
+
+			var borderList = new List<Rectangle>();
+
+			var listGridBorders = new List<List<Rectangle>>();
 
 			var gridBooks = new List<Book>();
 
@@ -88,13 +92,15 @@ namespace LibraryNET6Pages
 					var gridController = new GridController(this);
 
 					borderList.Add(gridController
-						.FillBorder(gridController
-						.CreateBorder(fourBooks.IndexOf(book)), book));
+						.FillRectangle(gridController
+						.CreateRectangle(fourBooks.IndexOf(book)), book));
 				}
 
 				listGridBorders.Add(borderList);
 
-				borderList = new List<Border>();
+				/*borderList = new List<Border>();*/
+
+				borderList = new List<Rectangle>();
 			}
 
 			foreach (var fourBorders in listGridBorders)
@@ -111,7 +117,7 @@ namespace LibraryNET6Pages
 			}
 		}
 
-		private async void Main_Click(object sender, RoutedEventArgs e)
+		private async void MainButton_Click(object sender, RoutedEventArgs e)
 		{
 			if (Opacity == 1)
 			{
@@ -181,12 +187,26 @@ namespace LibraryNET6Pages
 
 		private void SearchButton_PreviewMouseDown(object sender, MouseButtonEventArgs e)
 		{
-			SearchImage.Source = new BitmapImage(new Uri(@"/assets/search_pressed.png", UriKind.Relative));
+			SearchImage.Source = new BitmapImage(new Uri(@"/assets/search.png", UriKind.Relative));
 		}
 
 		private void SearchButton_PreviewMouseUp(object sender, MouseButtonEventArgs e)
 		{
-			SearchImage.Source = new BitmapImage(new Uri(@"/assets/search.png", UriKind.Relative));
+			SearchImage.Source = new BitmapImage(new Uri(@"/assets/search_pressed.png", UriKind.Relative));
+		}
+
+		private void SearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
+		{
+			SearchResultsStackPanel.Children.Clear();
+
+			DisplayFoundBooks(_librarydb.GetFoundBooks(SearchTextBox.Text), this);
+
+			SearchResultsStackPanel.BeginAnimation(OpacityProperty, new DoubleAnimation()
+			{
+				From = 0,
+				To = 1,
+				Duration = TimeSpan.FromSeconds(0.75)
+			});
 		}
 	}
 }

@@ -12,10 +12,9 @@
 		<!--RenderOptions.EdgeMode="Aliased"-->
 		<Style x:Key="SearchButton" TargetType="{x:Type Button}">
 			<Setter Property="OverridesDefaultStyle" Value="False"/>
-			<Setter Property="SnapsToDevicePixels" Value="False"/>
-			<Setter Property="BorderThickness" Value="0"/>
-			<Setter Property="Background" Value="#FF9001FF"/>
 			<Setter Property="RenderOptions.BitmapScalingMode" Value="HighQuality"/>
+			<Setter Property="BorderThickness" Value="0"/>
+			<Setter Property="Background" Value="White"/>
 			<Setter Property="Template">
 				<Setter.Value>
 					<ControlTemplate TargetType="{x:Type Button}">
@@ -33,7 +32,7 @@
 								<BeginStoryboard>
 									<Storyboard>
 										<ColorAnimation Storyboard.TargetProperty="Background.Color"
-	Duration="0:0:0.1" To="White"/>
+														Duration="0:0:0.05" To="#FF9001FF"/>
 									</Storyboard>
 								</BeginStoryboard>
 							</EventTrigger>
@@ -42,7 +41,25 @@
 								<BeginStoryboard>
 									<Storyboard>
 										<ColorAnimation Storyboard.TargetProperty="Background.Color"
-	Duration="0:0:0.1" To="#FF9001FF"/>
+														Duration="0:0:0.2" To="#FFEED9FF"/>
+									</Storyboard>
+								</BeginStoryboard>
+							</EventTrigger>
+
+							<EventTrigger RoutedEvent="MouseEnter">
+								<BeginStoryboard>
+									<Storyboard>
+										<ColorAnimation Storyboard.TargetProperty="Background.Color"
+														Duration="0:0:0.1" To="#FFEED9FF"/>
+									</Storyboard>
+								</BeginStoryboard>
+							</EventTrigger>
+
+							<EventTrigger RoutedEvent="MouseLeave">
+								<BeginStoryboard>
+									<Storyboard>
+										<ColorAnimation Storyboard.TargetProperty="Background.Color"
+														Duration="0:0:0.1" To="White"/>
 									</Storyboard>
 								</BeginStoryboard>
 							</EventTrigger>
@@ -57,18 +74,39 @@
 			<Setter Property="Template">
 				<Setter.Value>
 					<ControlTemplate TargetType="Button">
-						<Border x:Name="ButtonSearchBorder" BorderThickness="0" BorderBrush="Black"
-	Background="{TemplateBinding Background}">
+						<Border x:Name="ButtonSearchBorder"
+								BorderBrush="Black" Background="{TemplateBinding Background}"
+								BorderThickness="0">
 							<ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
 						</Border>
 						<ControlTemplate.Triggers>
-							<EventTrigger RoutedEvent="MouseEnter">
+							<EventTrigger RoutedEvent="PreviewMouseDown">
 								<BeginStoryboard>
 									<Storyboard>
 										<ColorAnimation Storyboard.TargetProperty="Foreground.Color"
-	Duration="0:0:0.1" To="White"/>
+													 Duration="0:0:0.1" To="White"/>
 										<ColorAnimation Storyboard.TargetProperty="Background.Color"
-	Duration="0:0:0.1" To="#FF9001FF"/>
+													 Duration="0:0:0.1" To="#FF9001FF"/>
+									</Storyboard>
+								</BeginStoryboard>
+							</EventTrigger>
+
+							<EventTrigger RoutedEvent="PreviewMouseUp">
+								<BeginStoryboard>
+									<Storyboard>
+										<ColorAnimation Storyboard.TargetProperty="Foreground.Color"
+													 Duration="0:0:0.1" To="#FF9001FF"/>
+										<ColorAnimation Storyboard.TargetProperty="Background.Color"
+														Duration="0:0:0.1" To="White"/>
+									</Storyboard>
+								</BeginStoryboard>
+							</EventTrigger>
+
+							<EventTrigger RoutedEvent="MouseEnter">
+								<BeginStoryboard>
+									<Storyboard>
+										<ColorAnimation Storyboard.TargetProperty="Background.Color"
+														Duration="0:0:0.1" To="#FFEED9FF"/>
 									</Storyboard>
 								</BeginStoryboard>
 							</EventTrigger>
@@ -76,10 +114,8 @@
 							<EventTrigger RoutedEvent="MouseLeave">
 								<BeginStoryboard>
 									<Storyboard>
-										<ColorAnimation Storyboard.TargetProperty="Foreground.Color"
-	Duration="0:0:0.1" To="#FF9001FF"/>
 										<ColorAnimation Storyboard.TargetProperty="Background.Color"
-	Duration="0:0:0.1" To="White"/>
+														Duration="0:0:0.1" To="White"/>
 									</Storyboard>
 								</BeginStoryboard>
 							</EventTrigger>
@@ -228,17 +264,17 @@
 	</Setter.Value>
 	</Setter>-->
 		</Style>
-		
+
 		<Style TargetType="{x:Type TextBox}" x:Key="SearchTBStyle">
-			<Setter Property="Padding" Value="20,0,10,0"/>
+			<Setter Property="Padding" Value="20,0,5,0"/>
 			<Setter Property="Template">
 				<Setter.Value>
 					<ControlTemplate TargetType="{x:Type TextBoxBase}">
 						<Border x:Name="border"
-								BorderBrush="#FF9001FF" BorderThickness="3"
+								BorderBrush="{TemplateBinding BorderBrush}"  BorderThickness="{TemplateBinding BorderThickness}"
 								Background="{TemplateBinding Background}"
 								Focusable="False"
-								CornerRadius="20,3,3,3">
+								CornerRadius="20,3,20,3">
 							<ScrollViewer x:Name="PART_ContentHost"
 										  Focusable="False"
 										  HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden"/>
@@ -340,24 +376,82 @@
 				</Trigger>
 			</Style.Triggers>
 		</Style>
+
 		
-		<!--
-			<Style x:Key="ContextMenuStyle" TargetType="{x:Type ContextMenu}">
-				<Setter Property="Background" Value="#FF9001FF"/>
-				<Setter Property="Foreground" Value="White"/>
-				<Setter Property="BorderThickness" Value="3"/>
-				<Setter Property="BorderBrush" Value="Bisque"/>
-				<Setter Property="Visibility" Value="Visible"/>
-				<Setter Property="Width" Value="100"/>
-				<Setter Property="Height" Value="100"/>
-				<Setter Property="Template">
-					<Setter.Value>
-						<ControlTemplate TargetType="{x:Type ContextMenu}"/>
-					</Setter.Value>
-				</Setter>
-			</Style>
-			-->
+		<!--#region colors-->
 		
+		<Color x:Key="WindowColor">#FFE8EDF9</Color>
+		<Color x:Key="ContentAreaColorLight">#FFC5CBF9</Color>
+		<Color x:Key="ContentAreaColorDark">#FF7381F9</Color>
+
+		<Color x:Key="DisabledControlLightColor">#FFE8EDF9</Color>
+		<Color x:Key="DisabledControlDarkColor">#FFC5CBF9</Color>
+		<Color x:Key="DisabledForegroundColor">#FF888888</Color>
+
+		<Color x:Key="SelectedBackgroundColor">#FFC5CBF9</Color>
+		<Color x:Key="SelectedUnfocusedColor">#FFDDDDDD</Color>
+
+		<Color x:Key="ControlLightColor">White</Color>
+		<Color x:Key="ControlMediumColor">#FF7381F9</Color>
+		<Color x:Key="ControlDarkColor">#FF211AA9</Color>
+
+		<Color x:Key="ControlMouseOverColor">#FF3843C4</Color>
+		<Color x:Key="ControlPressedColor">#FF211AA9</Color>
+
+
+		<Color x:Key="GlyphColor">#FF444444</Color>
+		<Color x:Key="GlyphMouseOver">sc#1, 0.004391443, 0.002428215, 0.242281124</Color>
+
+		<!--Border colors-->
+		<Color x:Key="BorderLightColor">#FFCCCCCC</Color>
+		<Color x:Key="BorderMediumColor">#FF888888</Color>
+		<Color x:Key="BorderDarkColor">#FF444444</Color>
+
+		<Color x:Key="PressedBorderLightColor">#FF888888</Color>
+		<Color x:Key="PressedBorderDarkColor">#FF444444</Color>
+
+		<Color x:Key="DisabledBorderLightColor">#FFAAAAAA</Color>
+		<Color x:Key="DisabledBorderDarkColor">#FF888888</Color>
+
+		<Color x:Key="DefaultBorderBrushDarkColor">Black</Color>
+
+		<!--Control-specific resources.-->
+		<Color x:Key="HeaderTopColor">#FFC5CBF9</Color>
+		<Color x:Key="DatagridCurrentCellBorderColor">Black</Color>
+		<Color x:Key="SliderTrackDarkColor">#FFC5CBF9</Color>
+
+		<Color x:Key="NavButtonFrameColor">#FF3843C4</Color>
+
+		<LinearGradientBrush x:Key="MenuPopupBrush"
+                     EndPoint="0.5,1"
+                     StartPoint="0.5,0">
+			<GradientStop Color="{DynamicResource ControlLightColor}"
+                Offset="0" />
+			<GradientStop Color="{DynamicResource ControlMediumColor}"
+                Offset="0.5" />
+			<GradientStop Color="{DynamicResource ControlLightColor}"
+                Offset="1" />
+		</LinearGradientBrush>
+
+		<LinearGradientBrush x:Key="ProgressBarIndicatorAnimatedFill"
+                     StartPoint="0,0"
+                     EndPoint="1,0">
+			<LinearGradientBrush.GradientStops>
+				<GradientStopCollection>
+					<GradientStop Color="#000000FF"
+                    Offset="0" />
+					<GradientStop Color="#600000FF"
+                    Offset="0.4" />
+					<GradientStop Color="#600000FF"
+                    Offset="0.6" />
+					<GradientStop Color="#000000FF"
+                    Offset="1" />
+				</GradientStopCollection>
+			</LinearGradientBrush.GradientStops>
+		</LinearGradientBrush>
+
+		<!--#endregion colors-->
+
 		<!--<ContextMenu x:Key="contextMenu">
 	<MenuItem Header="Edit"
 	Click="Edit_OnClick"
@@ -366,6 +460,191 @@
 	Click="Delete_OnClick"
 	CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=Parent}"/>
 	</ContextMenu>-->
+
+		<Style x:Key="ScrollBarLineButton"
+       TargetType="{x:Type RepeatButton}">
+			<Setter Property="SnapsToDevicePixels"
+          Value="True" />
+			<Setter Property="OverridesDefaultStyle"
+          Value="true" />
+			<Setter Property="Focusable"
+          Value="false" />
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="{x:Type RepeatButton}">
+						<Border x:Name="Border"
+                Margin="7,0,0,0"
+                CornerRadius="3"
+                BorderThickness="0"
+								BorderBrush="#FFEED9FF" Background="White">
+							<!--<Border.BorderBrush>
+								<LinearGradientBrush StartPoint="0,0"
+                                 EndPoint="0,1">
+									<LinearGradientBrush.GradientStops>
+										<GradientStopCollection>
+											<GradientStop Color="{DynamicResource BorderMediumColor}"
+                                Offset="0.0" />
+											<GradientStop Color="{DynamicResource BorderDarkColor}"
+                                Offset="1.0" />
+										</GradientStopCollection>
+									</LinearGradientBrush.GradientStops>
+								</LinearGradientBrush>
+							</Border.BorderBrush>-->
+							<!--<Border.Background>
+								<LinearGradientBrush StartPoint="0,0"
+                                 EndPoint="0,1">
+									<LinearGradientBrush.GradientStops>
+										<GradientStopCollection>
+											<GradientStop Color="{DynamicResource ControlLightColor}"/>
+											<GradientStop Color="{DynamicResource ControlMediumColor}"
+                                Offset="1.0" />
+										</GradientStopCollection>
+									</LinearGradientBrush.GradientStops>
+								</LinearGradientBrush>
+							</Border.Background>-->
+							<!--<VisualStateManager.VisualStateGroups>
+								<VisualStateGroup x:Name="CommonStates">
+									<VisualState x:Name="Normal" />
+									<VisualState x:Name="MouseOver" />
+									<VisualState x:Name="Pressed">
+										<Storyboard>
+											<ColorAnimationUsingKeyFrames Storyboard.TargetName="Border"
+                                                Storyboard.TargetProperty="(Panel.Background).
+                    (GradientBrush.GradientStops)[1].(GradientStop.Color)">
+												<EasingColorKeyFrame KeyTime="0"
+                                         Value="{StaticResource ControlPressedColor}" />
+											</ColorAnimationUsingKeyFrames>
+										</Storyboard>
+									</VisualState>
+									<VisualState x:Name="Disabled">
+										<Storyboard>
+											<ColorAnimationUsingKeyFrames Storyboard.TargetName="Arrow"
+                                                Storyboard.TargetProperty="(Shape.Fill).
+                    (SolidColorBrush.Color)">
+												<EasingColorKeyFrame KeyTime="0"
+                                         Value="{StaticResource DisabledForegroundColor}" />
+											</ColorAnimationUsingKeyFrames>
+										</Storyboard>
+									</VisualState>
+								</VisualStateGroup>
+							</VisualStateManager.VisualStateGroups>-->
+							<Path x:Name="Arrow"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Data="{Binding Content, 
+            RelativeSource={RelativeSource TemplatedParent}}">
+								<Path.Fill>
+									<SolidColorBrush Color="#FF9001FF"/>
+								</Path.Fill>
+							</Path>
+						</Border>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
+
+		<Style x:Key="ScrollBarPageButton"
+       TargetType="{x:Type RepeatButton}">
+			<Setter Property="SnapsToDevicePixels"
+          Value="True" />
+			<Setter Property="OverridesDefaultStyle"
+          Value="true" />
+			<Setter Property="IsTabStop"
+          Value="false" />
+			<Setter Property="Focusable"
+          Value="false" />
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="{x:Type RepeatButton}">
+						<Border Background="White" HorizontalAlignment="Right" />
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
+
+		<Style x:Key="ScrollBarThumb"
+       TargetType="{x:Type Thumb}">
+			<Setter Property="SnapsToDevicePixels"
+          Value="True" />
+			<Setter Property="OverridesDefaultStyle"
+          Value="true" />
+			<Setter Property="IsTabStop"
+          Value="false" />
+			<Setter Property="Focusable"
+          Value="false" />
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="{x:Type Thumb}">
+						<Border CornerRadius="5"
+                Background="#BF9001FF"
+								Margin="1,0,0,0"/>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
+
+		<ControlTemplate x:Key="VerticalScrollBar"
+                 TargetType="{x:Type ScrollBar}">
+			<Grid Margin="5,0,3,0">
+				<Grid.RowDefinitions>
+					<RowDefinition MaxHeight="18" />
+					<RowDefinition Height="0.00001*" />
+					<RowDefinition MaxHeight="18" />
+				</Grid.RowDefinitions>
+				<Border Grid.RowSpan="3"
+            CornerRadius="2"
+            Background="{TemplateBinding Background}" />
+				<RepeatButton Grid.Row="0"
+                  Style="{StaticResource ScrollBarLineButton}"
+                  VerticalAlignment="Center" HorizontalAlignment="Left"
+							  Margin="-5.51,0"
+                  Command="ScrollBar.LineUpCommand"
+                  Content="M 0 4 L 8 4 L 4 0 Z"
+							  />
+				<Track x:Name="PART_Track"
+           Grid.Row="1"
+           IsDirectionReversed="true">
+					<Track.DecreaseRepeatButton>
+						<RepeatButton Style="{StaticResource ScrollBarPageButton}"
+                      Command="ScrollBar.PageUpCommand" HorizontalAlignment="Left"/>
+					</Track.DecreaseRepeatButton>
+					<Track.Thumb>
+						<Thumb Style="{StaticResource ScrollBarThumb}"
+							   Margin="1,0,1,0"
+							   BorderBrush="#FF9001FF" Background="#FFEED9FF"/>
+					</Track.Thumb>
+					<Track.IncreaseRepeatButton>
+						<RepeatButton Style="{StaticResource ScrollBarPageButton}"
+                      Command="ScrollBar.PageDownCommand" HorizontalAlignment="Left"/>
+					</Track.IncreaseRepeatButton>
+				</Track>
+				<RepeatButton Grid.Row="2"
+                  Style="{StaticResource ScrollBarLineButton}"
+                  VerticalAlignment="Center" HorizontalAlignment="Left"
+							  Margin="-5.51,0"
+                  Command="ScrollBar.LineDownCommand"
+                  Content="M 0 0 L 4 4 L 8 0 Z" />
+			</Grid>
+		</ControlTemplate>
+
+		<Style x:Key="{x:Type ScrollBar}"
+       TargetType="{x:Type ScrollBar}">
+			<Setter Property="SnapsToDevicePixels"
+          Value="True" />
+			<Setter Property="OverridesDefaultStyle"
+          Value="true" />
+			<Style.Triggers>
+				<Trigger Property="Orientation"
+             Value="Vertical">
+					<Setter Property="Width"
+              Value="18" />
+					<Setter Property="Height"
+              Value="Auto" />
+					<Setter Property="Template"
+              Value="{StaticResource VerticalScrollBar}" />
+				</Trigger>
+			</Style.Triggers>
+		</Style>
 	</Page.Resources>
 
 	<Grid>
@@ -452,22 +731,6 @@
 						>
 					<Image x:Name="AddBookImage"
 						   Source="/assets/add_icon.png">
-						<!--<Image.Style>
-							<Style TargetType="{x:Type Image}">
-								<Style.Triggers>
-									<DataTrigger Binding="{Binding Path=IsMouseOver,
-	ElementName=ButtonSearchBorder}" Value="True">
-										<Setter Property="Source" Value="/assets/add_icon.png"/>
-									</DataTrigger>
-									<DataTrigger Binding="{Binding RelativeSource={RelativeSource
-	FindAncestor, AncestorType={x:Type Button},
-	AncestorLevel=1}, Path=IsPressed}"
-	Value="True">
-										<Setter Property="Source" Value="/assets/add_icon_pressed.png"/>
-									</DataTrigger>
-								</Style.Triggers>
-							</Style>
-						</Image.Style>-->
 					</Image>
 				</Button>
 
@@ -486,24 +749,36 @@
 					</Grid.ColumnDefinitions>
 
 					<TextBox x:Name="SearchTextBox" Style="{StaticResource SearchTBStyle}"
-							 Grid.ColumnSpan="7"
+							 Grid.ColumnSpan="8"
 							 VerticalContentAlignment="Center"
-							 FontSize="20" FontFamily="Century Gothic" Foreground="#FF9001FF"
+							 BorderBrush="#FF9000FF" BorderThickness="3"
+							 FontSize="20" FontFamily="Century Gothic" Foreground="#FF9064FF"
+							 TextChanged="SearchTextBox_TextChanged"
 							 GotFocus="SearchTextBox_GotFocus"  LostFocus="SearchTextBox_LostFocus"
 							 MouseEnter="SearchTextBox_MouseEnter" MouseLeave="SearchTextBox_MouseLeave"
 							 />
-					<TextBlock x:Name="SearchWatermark" Text="Поиск"
-						   Grid.ColumnSpan="7"
-						   IsHitTestVisible="False"
-						   FontSize="20" FontFamily="Century Gothic" Foreground="#FFC8C8FF"
-						   VerticalAlignment="Center" Padding="20,0"/>
+					<TextBlock x:Name="SearchWatermark" Text="Введите код, название жанр, или автора"
+							   Grid.ColumnSpan="7"
+							   IsHitTestVisible="False"
+							   FontSize="18" FontFamily="Century Gothic" Foreground="#FFC8C8FF"
+							   VerticalAlignment="Center" Padding="20,0"/>
 
 					<Button x:Name="SearchButton" Style="{StaticResource SearchButton}"
 							Grid.Column="7"
+							Visibility="Hidden"
 							Click="SearchButton_Click"
-							PreviewMouseDown="SearchButton_PreviewMouseDown"  PreviewMouseUp="SearchButton_PreviewMouseUp">
-						<Image x:Name="SearchImage" Source="/assets/search.png"/>
+							PreviewMouseDown="SearchButton_PreviewMouseDown"  PreviewMouseUp="SearchButton_PreviewMouseUp"
+							>
+						<Image x:Name="SearchImage" Source="/assets/search_pressed.png"/>
 					</Button>
+
+					<Image x:Name="SearchImage2"
+						   Source="/assets/search_pressed.png"
+						   Grid.Column="7"
+						   Opacity="0.25"
+						   HorizontalAlignment="Right"
+						   Margin="10,5,12,7"
+						   RenderOptions.BitmapScalingMode="HighQuality"/>
 				</Grid>
 			</Grid>
 		</DockPanel>

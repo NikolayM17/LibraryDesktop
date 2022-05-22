@@ -46,11 +46,14 @@ namespace LibraryNET6Pages
 
 		private async void AdminAuthButton_Click(object sender, RoutedEventArgs e)
 		{
-			EndFrameAnimation();
+			if (Opacity == 1)
+			{
+				EndFrameAnimation();
 
-			await Task.Delay(350);
+				await Task.Delay(350);
 
-			NavigationService.Navigate(new AdminEnterPage());
+				NavigationService.Navigate(new AdminEnterPage());
+			}
 		}
 
 		private async void Books_Click(object sender, RoutedEventArgs e)

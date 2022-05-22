@@ -35,15 +35,26 @@ namespace LibraryNET6Pages
 			AuthorTextBox.Text = book.Author;
 			GenreTextBox.Text = book.Genre;
 			/*GenreCb.SelectedItem = book.Genre;*/
-			YearTextBox.Text = book.Date.ToString();
+			YearTextBox.Text = book.Date.ToString() == "-1" ? "" : book.Date.ToString();
 			DescriptionTextBox.Text = book.Description;
+			MaxCountTextBox.Text = book.MaxCount.ToString() == "-1" ? "" : book.MaxCount.ToString();
+			BarcodeTextBox.Text = book.Barcode.ToString() == "-1" ? "" : book.Barcode.ToString();
 
-			BookImage.Source = ImageController.Convert.ByteArrayToWpfImage(
+			/*BookImage.Source = ImageController.Convert.ByteArrayToWpfImage(
+				Convert.FromBase64String(book.Image)
+				).Source;*/
+
+			openFdRectangleImageBrush.ImageSource = (BitmapImage)ImageController.Convert.ByteArrayToWpfImage(
 				Convert.FromBase64String(book.Image)
 				).Source;
 
-			TitleWaterMark.Visibility = TitleTextBox.Text.Length == 0 ? Visibility.Visible : Visibility.Hidden;
-			DescriptionWatermark.Visibility = DescriptionTextBox.Text.Length == 0 ? Visibility.Visible : Visibility.Hidden;
+			TitleWaterMark.Visibility = TitleTextBox.Text.Length == 0 ?
+				Visibility.Visible : Visibility.Hidden;
+			DescriptionWatermark.Visibility = DescriptionTextBox.Text.Length == 0 ?
+				Visibility.Visible : Visibility.Hidden;
+
+			BarcodeWaterMark.Visibility = BarcodeTextBox.Text.Length == 0 ?
+				Visibility.Visible : Visibility.Hidden;
 
 			StartFrameAnimation();
 
@@ -113,29 +124,29 @@ namespace LibraryNET6Pages
 
 		private void EditButton_Click(object sender, RoutedEventArgs e)
 		{
-			var message = new MsSqlController().EditBook(new Book(
+			var message = new MsSqlController<AdminPage>().EditBook(new Book(
 				_id,
 				TitleTextBox.Text,
 				AuthorTextBox.Text,
 				GenreTextBox.Text,
 				DescriptionTextBox.Text,
-				ImageController.Convert.WpfImageToByteArray(BookImage),
-				short.Parse(YearTextBox.Text)));
+				/*ImageController.Convert.WpfImageToByteArray(BookImage),*/
+				ImageController.Convert.WpfImageToByteArray(new Image()
+				{
+					Source = (BitmapImage)openFdRectangleImageBrush.ImageSource
+				}),
+				short.Parse(YearTextBox.Text),
+				int.Parse(MaxCountTextBox.Text),
+				long.Parse(BarcodeTextBox.Text)));
 
-			if (!(message is null))
-			{
-				MessageBox.Show(message);
-			}
-
-			else
-			{
-				MessageBox.Show("Done");
-			}
+			MessageBox.Show(message is not null ? message : "Done");
 		}
 
 		private void OpenPdfButton_Click(object sender, RoutedEventArgs e)
 		{
-			Process.Start(new ProcessStartInfo(@"D:\Downloads\85521056.a4\85521056.a4.pdf") { UseShellExecute = true });
+			//	Process.Start(new ProcessStartInfo(@"D:\Downloads\85521056.a4\85521056.a4.pdf") { UseShellExecute = true });
+
+			MessageBox.Show("Soon");
 		}
 
 		private void GenreCb_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -147,9 +158,20 @@ namespace LibraryNET6Pages
 		{
 			/*NavigationService.Navigate(new StudentsListPage());*/
 
-			var childWindow = new StudentsListWindow(_id);
+			var childWindow = new StudentsListWindow(_id) {Title = TitleTextBox.Text };
 
-			childWindow.ShowDialog();
+			if(childWindow.ShowDialog() == false)
+			{
+				UpdateCount();
+			}
+		}
+
+		private void UpdateCount()
+		{
+			if (int.Parse(MaxCountTextBox.Text) >= 0)
+			{
+				MaxCountTextBox.Text = MsSqlController<AdminPage>.GetRemainingCount(_id).ToString();
+			}
 		}
 
 		private async void AdminButton_Click(object sender, RoutedEventArgs e)
@@ -161,6 +183,43 @@ namespace LibraryNET6Pages
 				await Task.Delay(350);
 
 				NavigationService.Navigate(new AdminPage());
+			}
+		}
+
+		private void Rectangle_MouseDown(object sender, MouseButtonEventArgs e)
+		{
+			if (e.LeftButton == MouseButtonState.Pressed)
+			{
+				OpenFileDialog fileDialog = new OpenFileDialog();
+
+				fileDialog.Title = "Select a picture";
+				fileDialog.Filter = "All supported graphics|*.jpg;*.jpeg;*.png|" +
+				  "JPEG (*.jpg;*.jpeg)|*.jpg;*.jpeg|" +
+				  "Portable Network Graphic (*.png)|*.png";
+
+				if (fileDialog.ShowDialog() == true)
+				{
+					openFdRectangleImageBrush.ImageSource = new BitmapImage(new Uri(fileDialog.FileName));
+					openFdRectangleImageBrush.Stretch = System.Windows.Media.Stretch.Fill;
+
+					var img = new Image()
+					{
+						Source = (BitmapImage)openFdRectangleImageBrush.ImageSource
+					};
+				}
+			}
+		}
+
+		private void BarcodeTextBox_GotFocus(object sender, RoutedEventArgs e)
+		{
+			BarcodeWaterMark.Visibility = Visibility.Hidden;
+		}
+
+		private void BarcodeTextBox_LostFocus(object sender, RoutedEventArgs e)
+		{
+			if (BarcodeTextBox.Text.Length == 0)
+			{
+				BarcodeWaterMark.Visibility = Visibility.Visible;
 			}
 		}
 	}

@@ -21,13 +21,33 @@
 							<ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
 						</Border>
 						<ControlTemplate.Triggers>
-							<EventTrigger RoutedEvent="MouseEnter">
+							<EventTrigger RoutedEvent="PreviewMouseDown">
 								<BeginStoryboard>
 									<Storyboard>
 										<ColorAnimation Storyboard.TargetProperty="Foreground.Color"
-													 Duration="0:0:0.1" To="White"/>
+													 Duration="0:0:0.15" To="White"/>
 										<ColorAnimation Storyboard.TargetProperty="Background.Color"
-													 Duration="0:0:0.1" To="#FF9001FF"/>
+													 Duration="0:0:0.15" To="#FF9001FF"/>
+									</Storyboard>
+								</BeginStoryboard>
+							</EventTrigger>
+
+							<EventTrigger RoutedEvent="PreviewMouseUp">
+								<BeginStoryboard>
+									<Storyboard>
+										<ColorAnimation Storyboard.TargetProperty="Foreground.Color"
+													 Duration="0:0:0.15" To="#FF9001FF"/>
+										<ColorAnimation Storyboard.TargetProperty="Background.Color"
+														Duration="0:0:0.15" To="White"/>
+									</Storyboard>
+								</BeginStoryboard>
+							</EventTrigger>
+							
+							<EventTrigger RoutedEvent="MouseEnter">
+								<BeginStoryboard>
+									<Storyboard>
+										<ColorAnimation Storyboard.TargetProperty="Background.Color"
+														Duration="0:0:0.15" To="#FFEED9FF"/>
 									</Storyboard>
 								</BeginStoryboard>
 							</EventTrigger>
@@ -35,10 +55,8 @@
 							<EventTrigger RoutedEvent="MouseLeave">
 								<BeginStoryboard>
 									<Storyboard>
-										<ColorAnimation Storyboard.TargetProperty="Foreground.Color"
-													 Duration="0:0:0.1" To="#FF9001FF"/>
 										<ColorAnimation Storyboard.TargetProperty="Background.Color"
-														Duration="0:0:0.1" To="White"/>
+														Duration="0:0:0.15" To="White"/>
 									</Storyboard>
 								</BeginStoryboard>
 							</EventTrigger>
@@ -132,6 +150,7 @@
 						Margin="25,0"
 						Click="Books_Click"/>
 			</Grid>
+			
 			<DockPanel DockPanel.Dock="Bottom" >
 				<Button x:Name="AdminAuthButton" Style="{StaticResource EnterButtonStyle2}"
 						DockPanel.Dock="Right"

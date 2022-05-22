@@ -26,7 +26,7 @@ namespace LibraryNET6Pages
 
 				var encoder = new PngBitmapEncoder();
 
-				encoder.Frames.Add(BitmapFrame.Create((BitmapImage)image.Source));
+				encoder.Frames.Add(BitmapFrame.Create((BitmapSource)image.Source));
 				encoder.Save(memStream);
 
 				return memStream.ToArray();

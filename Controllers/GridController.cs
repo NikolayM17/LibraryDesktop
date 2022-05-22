@@ -6,6 +6,10 @@ using System.Collections.Generic;
 using System.Windows.Controls;
 using System.Windows.Navigation;
 using System.Threading.Tasks;
+using System.Windows.Shapes;
+using System.Windows.Media.Imaging;
+using System.Windows.Input;
+using System.Windows.Controls.Primitives;
 
 namespace LibraryNET6Pages
 {
@@ -73,6 +77,16 @@ namespace LibraryNET6Pages
 			return grid;
 		}
 
+		public Grid FillGrid(Grid grid, List<Rectangle> rectangles)
+		{
+			foreach (var rectangle in rectangles)
+			{
+				grid.Children.Add(rectangle);
+			}
+
+			return grid;
+		}
+
 		public Border FillBorder(Border border, Book book)
 		{
 			_currentBook = book;
@@ -101,6 +115,42 @@ namespace LibraryNET6Pages
 			Grid.SetColumnSpan(border, _BorderWidth);
 			Grid.SetRow(border, _BorderStartCoordinates);
 			Grid.SetRowSpan(border, _BorderHeight);
+		}
+
+		public Rectangle FillRectangle(Rectangle rectangle, Book book)
+		{
+			_currentBook = book;
+
+			rectangle.Fill = CreateImageBrush(ImageController.Convert.ByteArrayToWpfImage(Convert.FromBase64String(book.Image)));
+			rectangle.MouseDown += rectangle_MouseDown;
+
+			SetContextMenu(rectangle, new string[] { "Edit", "Delete" });
+			SetToolTip(rectangle, book);
+
+			return rectangle;
+		}
+
+		public Rectangle CreateRectangle(int position = 0)
+		{
+			var rectangle = new Rectangle()
+			{
+				StrokeThickness = _DefaultThickness.Top,
+				Stroke = _DefaultColor,
+				RadiusX = 5,
+				RadiusY = 5
+			};
+
+			SetRectanglePosition(rectangle, position);
+
+			return rectangle;
+		}
+
+		private void SetRectanglePosition(Rectangle rectangle, int position = 0)
+		{
+			Grid.SetColumn(rectangle, _BorderStartCoordinates + (_HorizontalDistance * position));
+			Grid.SetColumnSpan(rectangle, _BorderWidth);
+			Grid.SetRow(rectangle, _BorderStartCoordinates);
+			Grid.SetRowSpan(rectangle, _BorderHeight);
 		}
 
 		public Button CreateButton(Image bookImage)
@@ -138,14 +188,96 @@ namespace LibraryNET6Pages
 
 				foreach (var item in contextMenu.Items)
 				{
-					((MenuItem)item).Style = _resourceList.Find(i => ((Style)i).TargetType == new MenuItem().GetType()) as Style;
+					var l = _resourceList.FindAll(i => (i is Style)).Where(i => ((Style)i).TargetType == typeof(MenuItem));
+
+					/*_resourceList.Find(i => (i as Style).TargetType == typeof(MenuItem) *//*new MenuItem().GetType()*//*)*/
+
+					((MenuItem)item).Style = l as Style;
 					((MenuItem)item).Click += menuItem_Click;
 				}
 
-				contextMenu.Style = _resourceList.Find(i => ((Style)i).TargetType == new ContextMenu().GetType()) as Style;
+				var n = _resourceList.FindAll(i => (i is Style)).Where(i => ((Style)i).TargetType == typeof(ContextMenu));
+
+				/*_resourceList.Find(i => (i as Style).TargetType == new ContextMenu().GetType())*/
+
+				contextMenu.Style = n as Style;
 
 				button.ContextMenu = contextMenu;
 			}
+		}
+
+		private void SetContextMenu(Rectangle rectangle, string[] menuItemsHeaders)
+		{
+			if (_pageSender is AdminPage)
+			{
+				var contextMenu = new ContextMenu();
+
+				foreach (string header in menuItemsHeaders)
+				{
+					var menuItem = new MenuItem() { Header = header };
+
+					contextMenu.Items.Add(menuItem);
+				}
+
+				foreach (var item in contextMenu.Items)
+				{
+					var l = (_resourceList.FindAll(i => (i is Style)))
+						.FirstOrDefault(i => ((Style)i).TargetType == typeof(MenuItem));
+
+					((MenuItem)item).Style = l as Style;
+					((MenuItem)item).Click += menuItem_Click;
+				}
+
+				var n = (_resourceList.FindAll(i => (i is Style)))
+					.FirstOrDefault(i => ((Style)i).TargetType == typeof(ContextMenu));
+
+				contextMenu.Style = n as Style;
+
+				rectangle.ContextMenu = contextMenu;
+			}
+		}
+
+		private void SetToolTip(Rectangle rectangle, Book book)
+		{
+			var titleLabel = new Label()
+			{
+				Content = book.Title,
+				Foreground = new SolidColorBrush(Colors.White),
+				FontFamily = new FontFamily("Century Gothic"),
+				FontSize = 15,
+				FontWeight = FontWeights.Bold
+			};
+
+			var genreLabel = new Label()
+			{
+				Content = book.Genre,
+				Foreground = new SolidColorBrush(Colors.White),
+				FontFamily = new FontFamily("Century Gothic"),
+				FontSize = 15
+			};
+
+			var authorLabel = new Label()
+			{
+				Content = $"{book.Author} ({book.Date})",
+				Foreground = new SolidColorBrush(Colors.White),
+				FontFamily = new FontFamily("Century Gothic"),
+				FontSize = 15
+			};
+
+			var stackPanel = new StackPanel();
+
+			stackPanel.Children.Add(titleLabel);
+			stackPanel.Children.Add(genreLabel);
+			stackPanel.Children.Add(authorLabel);
+
+			rectangle.ToolTip = new ToolTip()
+			{
+				Content = stackPanel,
+				Background = new SolidColorBrush(Color.FromArgb(100, 144, 0, 255)),
+				Foreground = new SolidColorBrush(Colors.White),
+				FontFamily = new FontFamily("Century Gothic"),
+				FontSize = 15
+			};
 		}
 
 		public Image CreateImage(Image bookImage)
@@ -159,23 +291,33 @@ namespace LibraryNET6Pages
 					).Source*/
 			};
 
+		public ImageBrush CreateImageBrush(Image bookImage)
+			=> new ImageBrush()
+			{
+				Stretch = Stretch.Fill,
+				ImageSource = (BitmapImage)bookImage.Source
+			};
+		
 		private async void button_Click(object sender, RoutedEventArgs e)
 		{
-			if (_pageSender is AdminPage)
+			if (_pageSender.Opacity == 1)
 			{
-				((AdminPage)_pageSender).EndFrameAnimation();
-				
-				await Task.Delay(350);
+				if (_pageSender is AdminPage)
+				{
+					((AdminPage)_pageSender).EndFrameAnimation();
 
-				_pageSender.NavigationService.Navigate(new EditBookPage(_currentBook));
-			}
-			else
-			{
-				((CataloguePage)_pageSender).EndFrameAnimation();
+					await Task.Delay(350);
 
-				await Task.Delay(350);
+					_pageSender.NavigationService.Navigate(new EditBookPage(_currentBook));
+				}
+				else
+				{
+					((CataloguePage)_pageSender).EndFrameAnimation();
 
-				_pageSender.NavigationService.Navigate(new BookPage(_currentBook, _pageSender));
+					await Task.Delay(350);
+
+					_pageSender.NavigationService.Navigate(new BookPage(_currentBook, _pageSender));
+				}
 			}
 		}
 
@@ -183,15 +325,39 @@ namespace LibraryNET6Pages
 		{
 			if (((MenuItem)sender).Header.ToString() == "Delete")
 			{
-				new MsSqlController().DeleteBook(_currentBook);
+				new MsSqlController<AdminPage>().DeleteBook(_currentBook);
 
-				/*((MenuItem)sender).Header = "Deleted";*/
+				((AdminPage)_pageSender).UpdateSearchResults();
 			}
 			else if (((MenuItem)sender).Header.ToString() == "Edit")
 			{
 				_pageSender.NavigationService.Navigate(new EditBookPage(_currentBook));
+			}
+		}
 
-				/*((MenuItem)sender).Header = "Edited";*/
+		private async void rectangle_MouseDown(object sender, MouseButtonEventArgs e)
+		{
+			if (e.LeftButton == MouseButtonState.Pressed)
+			{
+				if (_pageSender.Opacity == 1)
+				{
+					if (_pageSender is AdminPage)
+					{
+						((AdminPage)_pageSender).EndFrameAnimation();
+
+						await Task.Delay(350);
+
+						_pageSender.NavigationService.Navigate(new EditBookPage(_currentBook));
+					}
+					else
+					{
+						((CataloguePage)_pageSender).EndFrameAnimation();
+
+						await Task.Delay(350);
+
+						_pageSender.NavigationService.Navigate(new BookPage(_currentBook, _pageSender));
+					}
+				}
 			}
 		}
 	}

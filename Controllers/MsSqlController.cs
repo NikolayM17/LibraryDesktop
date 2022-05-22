@@ -8,7 +8,8 @@ using Microsoft.Data.SqlClient;
 
 namespace LibraryNET6Pages
 {
-    public class MsSqlController : IDisposable
+    public class MsSqlController<T> : IDisposable
+        where T : Page
     {
         private List<Book> _bookList;
         private List<Genre> _genreList;
@@ -27,14 +28,14 @@ namespace LibraryNET6Pages
 
         private SqlConnection _connection;
 
-        public MsSqlController(Type sender = null)
+        public MsSqlController()
         {
             _bookList = new List<Book>();
             _genreList = new List<Genre>();
             _rentList = new List<RentRow>();
             _studentList = new List<Student>();
 
-            _connection = new SqlConnection(sender is not null ? _AdminConnectionString : _AssistantConnectionString);
+            _connection = new SqlConnection(typeof(T) == typeof(AdminPage) ? _AdminConnectionString : _AssistantConnectionString);
             {
                 _connection.Open();
 
@@ -48,36 +49,49 @@ namespace LibraryNET6Pages
                 
                 FillBookList(_DefaultSqlCommand);
                 FillGenreList();
-                FillStudentList();
+                /*FillStudentList();*/
             }
         }
 
         public static Tuple<bool, bool> IsEnterDataCorrect(string login, string password)
 		{
             bool isLoginExists = false;
+            bool isUserAdmin = false;
             bool isPasswordCorrect = true;
-
-            string sqlConnection = $"Server=(local);Integrated Security=false;Database=librarydb;User ID={login};Password={password};Trust Server Certificate=True;";
 
             using (var connection = new SqlConnection(_AdminConnectionString))
 			{
                 connection.Open();
 
-                var sqlCommand = new SqlCommand($"use librarydb; select is_srvrolemember('sysadmin', '{login}');", connection);
+                var sqlCommand = new SqlCommand($"select count(loginname) from librarydb.sys.syslogins where loginname = '{login}';", connection);
 
                 using (var reader = sqlCommand.ExecuteReader())
 				{
                     if (reader.Read())
 					{
-                        isLoginExists = Convert.ToBoolean(int.Parse(reader.GetValue(0).ToString()));
+                        isLoginExists = int.Parse(reader.GetValue(0).ToString()) > 0;
 					}
 				}
 
                 if (isLoginExists)
                 {
+                    sqlCommand = new SqlCommand($"select is_srvrolemember('sysadmin', '{login}');", connection);
+
+                    using (var reader = sqlCommand.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            isUserAdmin = Convert.ToBoolean(int.Parse(reader.GetValue(0).ToString()));
+                        }
+                    }
+                }
+
+                if (isUserAdmin)
+                {
                     connection.Close();
 
-                    connection.ConnectionString = sqlConnection;
+                    connection.ConnectionString =
+                        $"Server=(local);Integrated Security=false;Database=librarydb;User ID={login};Password={password};Trust Server Certificate=True;";
 
                     try
                     {
@@ -88,9 +102,10 @@ namespace LibraryNET6Pages
                         isPasswordCorrect = false;
                     }
                 }
+
 			}
 
-            return Tuple.Create(isLoginExists, isPasswordCorrect);
+            return Tuple.Create(isUserAdmin, isPasswordCorrect);
 		}
 
         public List<Book> AllBooks { get => _bookList; }
@@ -117,7 +132,10 @@ namespace LibraryNET6Pages
 
             foreach (var book in _bookList)
             {
-                if (book.Title.ToLower().Contains(query.ToLower()))
+                if (book.Title.ToLower().Contains(query.ToLower()) ||
+                    book.Author.ToLower().Contains(query.ToLower()) ||
+                    book.Genre.ToLower().Contains(query.ToLower()) ||
+                    book.Barcode.ToString().ToLower().Contains(query.ToLower()))
                 {
                     foundBooks.Add(book);
                 }
@@ -137,15 +155,19 @@ namespace LibraryNET6Pages
                  "@author varchar(30), " +
                  "@genre varchar(30), " +
                  "@description varchar(1000), " +
-                 "@date int " +
+                 "@date int," +
+				 "@count int, " +
+				 "@barcode bigint " +
                  "" +
                  $"set @title = '{book.Title}' " +
                  $"set @author = '{book.Author}' " +
                  $"set @genre = '{book.Genre}' " +
                  $"set @description = '{book.Description}' " +
-                 $"set @date = {book.Date} " +
+                 (book.Date < 0 ? "" : $"set @date = {book.Date}, ") +
+				 (book.MaxCount < 0 ? "" : $"set @count = {book.MaxCount} ") +
+                 (book.Barcode < 0 ? "" : $"set @barcode = {book.Barcode} ") +
                  "" +
-                 "exec sp_fill_lib_data @title, @author, @genre, @description, @image, @date;"
+                 "exec sp_fill_lib_data @title, @author, @genre, @description, @image, @date, @count, @barcode;"
                  );
 
             var sqlParameter = new SqlParameter("@image", SqlDbType.VarBinary);
@@ -169,7 +191,9 @@ namespace LibraryNET6Pages
                  "@author varchar(30), " +
                  "@genre varchar(30), " +
                  "@description varchar(1000), " +
-                 "@date int " +
+                 "@date int, " +
+				 "@count int, " +
+				 "@barcode bigint " +
                  "" +
                  $"set @id = {book.Id} " +
                  $"set @title = '{book.Title}' " +
@@ -177,8 +201,14 @@ namespace LibraryNET6Pages
                  $"set @genre = '{book.Genre}' " +
                  $"set @description = '{book.Description}' " +
                  $"set @date = {book.Date} " +
+				 $"set @count = {book.MaxCount} + " +
+				 "(select isnull((select count(student_id) as count " +
+				 "from student_book_connection " +
+				 $"where book_id = {book.Id} " +
+				 "group by book_id), 0)) " +
+				 $"set @barcode = {book.Barcode} " +
                  "" +
-                 "exec sp_EditBook @id, @title, @author, @genre, @description, @image, @date;"
+                 "exec sp_EditBook @id, @title, @author, @genre, @description, @image, @date, @count, @barcode;"
                  );
 
             var sqlParameter = new SqlParameter("@image", SqlDbType.VarBinary);
@@ -200,25 +230,61 @@ namespace LibraryNET6Pages
             return ExecuteCommand(command);
         }
 
-        public string ExecuteCommand(SqlCommand sqlCommand)
+        public static int GetRemainingCount(int bookId)
+		{
+            if (typeof(T) == typeof(AdminPage))
+            {
+                string command = 
+                "select max_count - (" +
+                "select isnull((select count(student_id) as count " +
+                "from student_book_connection " +
+                $"where book_id = {bookId} " +
+                "group by book_id), 0)) as count " +
+                "" +
+                "from books " +
+				$"where id = {bookId}";
+
+                using (var connection = new SqlConnection(_AdminConnectionString))
+                {
+                    connection.Open();
+
+                    using (var reader = new SqlCommand(command, connection).ExecuteReader())
+                    {
+                        if (reader.HasRows)
+                        {
+                            while (reader.Read())
+                            {
+                                return int.Parse(reader.GetValue(0).ToString());
+                            }
+                        }
+
+                        return 0;
+                    }
+                }
+            }
+
+            return 0;
+        }
+
+        /*public static int GetBookMaxCount(int bookId)
+        {
+
+        }*/
+
+        private string ExecuteCommand(SqlCommand sqlCommand)
         {
             try
             {
-                /*using (var connection = new SqlConnection(_ConnectionString))
-                {
-                    connection.Open();
-*/
                 sqlCommand.Connection = _connection;
 
                 sqlCommand.ExecuteNonQuery();
-                //}
             }
             catch (Exception ex)
             {
                 return ex.Message;
             }
 
-            return null;
+            return "Executed.";
         }
 
         private void FillBookList(string sqlCommand = _DefaultSqlCommand)
@@ -238,18 +304,29 @@ namespace LibraryNET6Pages
 
                         _bookList.Add(new Book
                         (
-                            short.Parse(reader.GetValue(0).ToString()),         //  id
+                            int.Parse(reader.GetValue(0).ToString()),           //  id
                             reader.GetValue(1).ToString(),                   //  title
                             reader.GetValue(2).ToString(),                  //  author
                             reader.GetValue(3).ToString(),                   //  genre
                             reader.GetValue(4).ToString(),             //  description
                             Convert.ToBase64String(byteImage),               //  image
-                            short.Parse(reader.GetValue(6).ToString())        //  date
+                            int.Parse(reader.GetValue(6).ToString().Length == 0 ?
+                            "-1" : reader.GetValue(6).ToString()),            //  date
+                            int.Parse(reader.GetValue(7).ToString().Length == 0 ?
+                            "-1" : reader.GetValue(7).ToString()),           //  count
+                            long.Parse(reader.GetValue(8).ToString().Length == 0 ?
+                            "-1" : reader.GetValue(8).ToString())          //  barcode
                         ));
                     }
                 }
             }
         }
+
+        public void UpdateBookList()
+		{
+            _bookList.Clear();
+            FillBookList();
+		}
 
         private void FillGenreList()
         {
@@ -271,39 +348,14 @@ namespace LibraryNET6Pages
                 }
             }
         }
-
-        public void AddStudent(Student newStudent)
-		{
-            string sqlCommand = "insert into students " +
-                $"values ('{newStudent.Name}', {newStudent.FailedDeadlines})";
-
-            new SqlCommand(sqlCommand, _connection).ExecuteNonQuery();
-		}
-
-        public void EditStudent(Student currentStudent)
-		{
-            string sqlCommand = "update students " +
-                "set " +
-                $"name = '{currentStudent.Name}', " +
-                $"failed_deadlines = {currentStudent.FailedDeadlines} " +
-				$"where id = {currentStudent.Id}";
-
-            new SqlCommand(sqlCommand, _connection).ExecuteNonQuery();
-		}
         
-        public void DeleteStudent(int studentId)
-		{
-            string sqlCommand = "delete students " +
-                $"where id = {studentId}";
-
-            new SqlCommand(sqlCommand, _connection).ExecuteNonQuery();
-		}
-
         public void FillRentList(int bookId)
         {
+            _rentList.Clear();
+
             string sqlCommand =
                 "use librarydb; " +
-                "select students.name as student, rent_date, deadline, return_date, is_deadline_failed " +
+                "select students.name as student, rent_date, deadline, return_date, is_deadline_failed, student_id " +
 				"from student_book_connection " +
 				"inner join students on student_book_connection.student_id = students.id " +
                 $"where book_id = {bookId};";
@@ -326,25 +378,67 @@ namespace LibraryNET6Pages
                         bool.TryParse(reader.GetValue(4).ToString(), out bool isDeadlineFailed);
 
                         _rentList.Add(new RentRow
-						{
-                            Student = reader.GetValue(0).ToString(),
-                            RentDate = rentDate/* == DateTime.MinValue ? DateTime.Now : rentDate*/,
-                            Deadline = deadline/* == DateTime.MinValue ? DateTime.Now.AddDays(14) : deadline*/,
+						(
+                            id: int.Parse(reader.GetValue(5).ToString()),
+                            name: reader.GetValue(0).ToString(),
+                            rentDate:  rentDate/* == DateTime.MinValue ? DateTime.Now : rentDate*/,
+                            deadline: deadline/* == DateTime.MinValue ? DateTime.Now.AddDays(14) : deadline*/,
                             /*RentDate = DateTime.Parse(reader.GetValue(1).ToString()),
                             Deadline = DateTime.Parse(reader.GetValue(2).ToString()),*/
-							ReturnDate = returnDate == DateTime.MinValue ? null : returnDate,
-							IsDeadlineFailed = isDeadlineFailed
-                        });
+							returnDate: (returnDate == DateTime.MinValue || returnDate == (DateTime.Parse("1/1/1900 12:00:00 AM"))) ? null : returnDate,
+                            isDeadlineFailed: isDeadlineFailed
+                        ));
 
-                        _rentList[0].ReturnDate.ToString();
+                        /*_rentList[0].ReturnDate.ToString();*/
 					}
                 }
             }
         }
 
-        private void FillStudentList()
+        public string DeleteRentRange(string rangeStudentId, int bookId)
+		{
+            var command = new SqlCommand(
+                "delete student_book_connection " +
+                $"where student_id in ({rangeStudentId}) and book_id = {bookId}");
+
+            return ExecuteCommand(command);
+        }
+
+        public string EditRentRow(RentRow rentRow, int bookId)
+		{
+            var command = new SqlCommand(
+                "update student_book_connection " +
+                "set " +
+                $"rent_date = '{rentRow.RentDate.ToString()}', " +
+                $"deadline = '{rentRow.Deadline.ToString()}', " +
+                $"return_date = '{rentRow.ReturnDate.ToString()}', " +
+                $"is_deadline_failed = {Convert.ToInt32(rentRow.IsDeadlineFailed)} " +
+                $"where book_id = {bookId} and student_id = {rentRow.Id}");
+
+            return ExecuteCommand(command);
+		}
+
+        public string AddRentRange(string rangeStudentId, int bookId)
+		{
+            var command = new SqlCommand(
+                "insert into student_book_connection (book_id, student_id, rent_date, deadline, is_deadline_failed) " +
+                "select books.id, students.id, GETDATE(), GETDATE() + 14, 0 " +
+                "from books, students " +
+                $"where books.id = {bookId} and students.id in ({rangeStudentId});");
+
+            return ExecuteCommand(command);
+        }
+
+        public void FillStudentList(int ignore_id)
         {
-            string sqlCommand = "select * from students";
+            _studentList.Clear();
+
+            string sqlCommand =
+                "select * from students " +
+				"where id not in (" +
+				"select id from students " +
+				"inner join student_book_connection on students.id = student_book_connection.student_id " +
+				$"where book_id = {ignore_id})";
 
             var newCommand = new SqlCommand(sqlCommand, _connection);
 
@@ -363,6 +457,36 @@ namespace LibraryNET6Pages
                     }
                 }
             }
+        }
+
+        public string DeleteStudentRange(string rangeStudentId, int bookId)
+		{
+            var command = new SqlCommand(
+                "delete student " +
+                $"where student_id in ({rangeStudentId}) and book_id = {bookId}");
+
+            return ExecuteCommand(command);
+		}
+
+        public string EditStudent(Student student)
+		{
+            var command = new SqlCommand(
+                "update students " +
+                $"set " +
+                $"name = '{student.Name}', " +
+                $"failed_deadlines = {student.FailedDeadlines} " +
+                $"where id = {student.Id}");
+
+            return ExecuteCommand(command);
+        }
+
+        public string AddStudent(Student newStudent)
+		{
+            var command = new SqlCommand(
+                "insert into students " +
+                $"values ('{newStudent.Name}', {newStudent.FailedDeadlines})");
+
+            return ExecuteCommand(command);
         }
 
         public void Dispose()
