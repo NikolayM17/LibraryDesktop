@@ -14,6 +14,10 @@
     <None Remove="assets\search.png" />
     <None Remove="assets\search_pressed.png" />
     <None Remove="Frames\Book\icon.png" />
+    <None Remove="Frames\icon.png" />
+    <None Remove="Frames\program_icon.png" />
+    <None Remove="program_icon.png" />
+    <None Remove="program_icon2.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -28,6 +32,10 @@
     <Resource Include="assets\search.png" />
     <Resource Include="assets\search_pressed.png" />
     <Resource Include="Frames\Book\icon.png" />
+    <Resource Include="Frames\icon.png" />
+    <Resource Include="Frames\program_icon.png" />
+    <Resource Include="program_icon.png" />
+    <Resource Include="program_icon2.png" />
   </ItemGroup>
 
 </Project>

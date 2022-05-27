@@ -160,7 +160,7 @@
 						Click="AdminAuthButton_Click"/>
 				<Label DockPanel.Dock="Right"/>
 			</DockPanel>
-			<Image Source="/assets/Icon.png" />
+			<Image Source="/Frames/icon.png" />
 
 		</DockPanel>
 	</Grid>

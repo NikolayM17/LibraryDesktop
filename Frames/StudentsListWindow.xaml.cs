@@ -276,7 +276,12 @@ namespace LibraryNET6Pages
 
 			StudentsDataGrid.ItemsSource = new List<Student>(_librarydb.AllStudents);
 
-			RemainingCountTextBox.Text = MsSqlController<AdminPage>.GetRemainingCount(_bookId).ToString();
+			int.TryParse(RemainingCountTextBox.Text, out int count);
+
+			if (count >= 0)
+			{
+				RemainingCountTextBox.Text = MsSqlController<AdminPage>.GetRemainingCount(_bookId).ToString();
+			}
 		}
 
 		private void UpdateRowRentTable()
@@ -285,7 +290,12 @@ namespace LibraryNET6Pages
 
 			StudentsDataGrid.ItemsSource = new List<RentRow>(_librarydb.AllRents);
 
-			RemainingCountTextBox.Text = MsSqlController<AdminPage>.GetRemainingCount(_bookId).ToString();
+			int.TryParse(RemainingCountTextBox.Text, out int count);
+
+			if (count >= 0)
+			{
+				RemainingCountTextBox.Text = MsSqlController<AdminPage>.GetRemainingCount(_bookId).ToString();
+			}
 		}
 
 		private void StudentsDataGrid_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -350,8 +360,6 @@ namespace LibraryNET6Pages
 
 		private void AddSelectedButton_Click(object sender, RoutedEventArgs e)
 		{
-			MessageBox.Show(GetStringRange("students"));
-
 			AddRents();
 		}
 

@@ -16,6 +16,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+using LibraryNET6Pages.Controllers;
+
 namespace LibraryNET6Pages
 {
 	/// <summary>
@@ -124,22 +126,86 @@ namespace LibraryNET6Pages
 
 		private void EditButton_Click(object sender, RoutedEventArgs e)
 		{
-			var message = new MsSqlController<AdminPage>().EditBook(new Book(
-				_id,
-				TitleTextBox.Text,
-				AuthorTextBox.Text,
-				GenreTextBox.Text,
-				DescriptionTextBox.Text,
-				/*ImageController.Convert.WpfImageToByteArray(BookImage),*/
-				ImageController.Convert.WpfImageToByteArray(new Image()
-				{
-					Source = (BitmapImage)openFdRectangleImageBrush.ImageSource
-				}),
-				short.Parse(YearTextBox.Text),
-				int.Parse(MaxCountTextBox.Text),
-				long.Parse(BarcodeTextBox.Text)));
+			if (IsBookFilled() && IsBookCorrect())
+			{
+				var message = new MsSqlController<AdminPage>().EditBook(new Book(
+					_id,
+					TitleTextBox.Text,
+					AuthorTextBox.Text,
+					GenreTextBox.Text,
+					DescriptionTextBox.Text,
+					/*ImageController.Convert.WpfImageToByteArray(BookImage),*/
+					ImageController.Convert.WpfImageToByteArray(new Image()
+					{
+						Source = (BitmapImage)openFdRectangleImageBrush.ImageSource
+					}),
+					int.TryParse(YearTextBox.Text, out int year) ? year : -1,
+					int.TryParse(MaxCountTextBox.Text, out int count) ? count : -1,
+					long.TryParse(BarcodeTextBox.Text, out long barcode) ? barcode : -1
+					));
 
-			MessageBox.Show(message is not null ? message : "Done");
+				MessageBox.Show(message is not null ? message : "Done");
+			}
+		}
+
+		private bool IsBookFilled()
+		{
+			if (TitleTextBox.Text.Length == 0)
+			{
+				MessageBox.Show("Введите название книги");
+				return false;
+			}
+			else
+			{
+				if (AuthorTextBox.Text.Length == 0 &&
+					MessageBox.Show("Введите автора книги", "", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+				{
+					return false;
+				}
+				if (GenreTextBox.Text.Length == 0 &&
+					MessageBox.Show("Введите жанр книги", "", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+				{
+					return false;
+				}
+				if (YearTextBox.Text.Length == 0 &&
+					MessageBox.Show("Введите дату выпуска книги", "", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+				{
+					return false;
+				}
+				if (MaxCountTextBox.Text.Length == 0 &&
+					MessageBox.Show("Введите количество оставшихся книг", "", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+				{
+					return false;
+				}
+				if (BarcodeTextBox.Text.Length == 0 &&
+					MessageBox.Show("Введите код книги", "", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+				{
+					return false;
+				}
+			}
+
+			return true;
+		}
+
+		private bool IsBookCorrect()
+		{
+			bool result = false;
+
+			if (!InputDataController.IsDataParsedToInt(YearTextBox.Text))
+			{
+				MessageBox.Show("Проверьте год выпуска книги");
+			}
+			else if (!InputDataController.IsDataParsedToInt(MaxCountTextBox.Text))
+			{
+				MessageBox.Show("Проверьте количество оставшихся книг");
+			}
+			else if (!InputDataController.IsDataParsedToLong(BarcodeTextBox.Text))
+			{
+				MessageBox.Show("Проверьте код книги");
+			}
+			else result = true;
+
+			return result;
 		}
 
 		private void OpenPdfButton_Click(object sender, RoutedEventArgs e)
@@ -168,9 +234,11 @@ namespace LibraryNET6Pages
 
 		private void UpdateCount()
 		{
-			if (int.Parse(MaxCountTextBox.Text) >= 0)
+			if (InputDataController.IsDataParsedToInt(MaxCountTextBox.Text))
 			{
-				MaxCountTextBox.Text = MsSqlController<AdminPage>.GetRemainingCount(_id).ToString();
+				int count = MsSqlController<AdminPage>.GetRemainingCount(_id);
+
+				MaxCountTextBox.Text = count >= 0 ? count.ToString() : "";
 			}
 		}
 

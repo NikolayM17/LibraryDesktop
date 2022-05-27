@@ -41,5 +41,11 @@ namespace LibraryNET6Pages
 
 			/*IconImage.Source = new BitmapImage(new Uri(@"dIcon.png", UriKind.Relative));*/
 		}
+
+		private void Window_MouseDown(object sender, MouseButtonEventArgs e)
+		{
+			if (e.ChangedButton == MouseButton.Left/* && IsFocused*/)
+				this.DragMove();
+		}
 	}
 }

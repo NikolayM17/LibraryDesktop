@@ -14,6 +14,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+using LibraryNET6Pages.Controllers;
+
 namespace LibraryNET6Pages
 {
 	/// <summary>
@@ -119,7 +121,7 @@ namespace LibraryNET6Pages
 
 		private async void AdminEnterButton_Click(object sender, RoutedEventArgs e)
 		{
-			var isEnterDataCorrect = MsSqlController<Page>.IsEnterDataCorrect(LoginTextBox.Text, PasswordTextBox.Password);
+			var isEnterDataCorrect = InputDataController.CheckAdmin(LoginTextBox.Text, PasswordTextBox.Password);
 
 			if (isEnterDataCorrect.Item1 && isEnterDataCorrect.Item2)
 			{

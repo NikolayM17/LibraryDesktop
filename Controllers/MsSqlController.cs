@@ -254,16 +254,18 @@ namespace LibraryNET6Pages
                         {
                             while (reader.Read())
                             {
-                                return int.Parse(reader.GetValue(0).ToString());
+                                bool result = int.TryParse(reader.GetValue(0).ToString(), out int count);
+
+                                return result ? count : -1;
                             }
                         }
 
-                        return 0;
+                        return -1;
                     }
                 }
             }
 
-            return 0;
+            return -1;
         }
 
         /*public static int GetBookMaxCount(int bookId)

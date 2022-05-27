@@ -15,6 +15,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+using LibraryNET6Pages.Controllers;
+
 namespace LibraryNET6Pages
 {
 	/// <summary>
@@ -22,8 +24,6 @@ namespace LibraryNET6Pages
 	/// </summary>
 	public partial class AddBookPage : Page
 	{
-		/*private byte[] _bookImage;*/
-
 		public AddBookPage()
 		{
 			InitializeComponent();
@@ -49,7 +49,7 @@ namespace LibraryNET6Pages
 
 		private void CreateButton_Click(object sender, RoutedEventArgs e)
 		{
-			if (IsBookFilled())
+			if (IsBookFilled() && IsBookCorrect())
 			{
 				var message = new MsSqlController<AdminPage>().AddBook(new Book(
 					0,
@@ -62,9 +62,10 @@ namespace LibraryNET6Pages
 					{
 						Source = openFdRectangleImageBrush.ImageSource
 					}),
-					short.Parse(YearTextBox.Text.Length == 0 ? "-1" : YearTextBox.Text),
+					int.Parse(YearTextBox.Text.Length == 0 ? "-1" : YearTextBox.Text),
 					int.Parse(MaxCountTextBox.Text.Length == 0 ? "-1" : MaxCountTextBox.Text),
-					long.Parse(BarcodeTextBox.Text.Length == 0 ? "-1" : BarcodeTextBox.Text)));
+					long.Parse(BarcodeTextBox.Text.Length == 0 ? "-1" : BarcodeTextBox.Text)
+					));
 
 				MessageBox.Show(message is not null ? message : "Done");
 			}
@@ -72,63 +73,62 @@ namespace LibraryNET6Pages
 
 		private bool IsBookFilled()
 		{
-			bool titleIsReady = false;
-			bool authorIsReady = false;
-			bool genreIsReady = false;
-			bool dateIsReady = false;
-			bool descriptionIsReady = false;
-			bool countIsReady = false;
-
 			if (TitleTextBox.Text.Length == 0)
 			{
 				MessageBox.Show("Введите название книги");
+				return false;
 			}
 			else
 			{
-				titleIsReady = true;
-
-				if (AuthorTextBox.Text.Length == 0)
+				if (AuthorTextBox.Text.Length == 0 &&
+					MessageBox.Show("Введите автора книги", "", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
 				{
-					if (MessageBox.Show("Введите автора книги", "", MessageBoxButton.YesNo) == MessageBoxResult.No)
-					{
-						authorIsReady = true;
-
-						if (GenreTextBox.Text.Length == 0)
-						{
-							if (MessageBox.Show("Введите жанр книги", "", MessageBoxButton.YesNo) == MessageBoxResult.No)
-							{
-								genreIsReady = true;
-
-								if (YearTextBox.Text.Length == 0)
-								{
-									if (MessageBox.Show("Введите дату выпуска книги", "", MessageBoxButton.YesNo) == MessageBoxResult.No)
-									{
-										dateIsReady = true;
-
-										if (DescriptionTextBox.Text.Length == 0)
-										{
-											if (MessageBox.Show("Введите описание книги", "", MessageBoxButton.YesNo) == MessageBoxResult.No)
-											{
-												descriptionIsReady = true;
-
-												if (MaxCountTextBox.Text.Length == 0)
-												{
-													if (MessageBox.Show("Введите количество оставшихся экземпляров", "", MessageBoxButton.YesNo) == MessageBoxResult.No)
-													{
-														countIsReady = true;
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
+					return false;
+				}
+				if (GenreTextBox.Text.Length == 0 &&
+					MessageBox.Show("Введите жанр книги", "", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+				{
+					return false;
+				}
+				if (YearTextBox.Text.Length == 0 &&
+					MessageBox.Show("Введите дату выпуска книги", "", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+				{
+					return false;
+				}
+				if (MaxCountTextBox.Text.Length == 0 &&
+					MessageBox.Show("Введите количество оставшихся книг", "", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+				{
+					return false;
+				}
+				if (BarcodeTextBox.Text.Length == 0 &&
+					MessageBox.Show("Введите код книги", "", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+				{
+					return false;
 				}
 			}
-			
-			return titleIsReady && authorIsReady && genreIsReady && dateIsReady && descriptionIsReady && countIsReady;
+
+			return true;
+		}
+
+		private bool IsBookCorrect()
+		{
+			bool result = false;
+
+			if (!InputDataController.IsDataParsedToInt(YearTextBox.Text))
+			{
+				MessageBox.Show("Проверьте год выпуска книги");
+			}
+			else if (!InputDataController.IsDataParsedToInt(MaxCountTextBox.Text))
+			{
+				MessageBox.Show("Проверьте количество оставшихся книг");
+			}
+			else if (!InputDataController.IsDataParsedToLong(BarcodeTextBox.Text))
+			{
+				MessageBox.Show("Проверьте код книги");
+			}
+			else result = true;
+
+			return result;
 		}
 
 		private void OpenFileDialogButton_Click(object sender, RoutedEventArgs e)
