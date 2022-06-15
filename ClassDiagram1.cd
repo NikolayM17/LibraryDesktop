@@ -1,0 +1,155 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="LibraryNET6Pages.GridController">
+    <Position X="20.25" Y="4" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>gQAAAAAAAAAAAAYoAAAEogACAAAJUAEFBEgAgigAAAE=</HashCode>
+      <FileName>Controllers\GridController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LibraryNET6Pages.ImageController">
+    <Position X="20.25" Y="0.75" Width="2.5" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Class Name="LibraryNET6Pages.ImageController.Convert">
+        <TypeIdentifier>
+          <NewMemberFileName>Controllers\ImageController.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Controllers\ImageController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LibraryNET6Pages.Controllers.InputDataController">
+    <Position X="5.5" Y="4.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAQAAAAAAAAAE=</HashCode>
+      <FileName>Controllers\InputDataController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LibraryNET6Pages.MsSqlController&lt;T&gt;">
+    <Position X="14.75" Y="0.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AJBBAABAAgAgIABCACRAIAACAHCAAoCCICIAAAEABAA=</HashCode>
+      <FileName>Controllers\MsSqlController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LibraryNET6Pages.AdminEnterPage" BaseTypeListCollapsed="true">
+    <Position X="3" Y="0.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AQAIgAAAAAAIACAAAAAACIgAAAAAAAEAAIAAAAAEQAg=</HashCode>
+      <FileName>Frames\Admin\AdminEnterPage.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="LibraryNET6Pages.AdminPage" BaseTypeListCollapsed="true">
+    <Position X="17.25" Y="0.75" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AgEAAACQAAAoAAQQAABAAAAAAAAACQAAAIBAoAgAQAg=</HashCode>
+      <FileName>Frames\Admin\AdminPage.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="LibraryNET6Pages.AddBookPage" BaseTypeListCollapsed="true">
+    <Position X="0.5" Y="6.25" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AEABIAAAAEAAACABAAAAAAAAAEAwAAAAAACCEAAAQAg=</HashCode>
+      <FileName>Frames\Book\AddBookPage.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="LibraryNET6Pages.BookPage" BaseTypeListCollapsed="true">
+    <Position X="14.75" Y="9" Width="2" />
+    <TypeIdentifier>
+      <HashCode>gAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAQAg=</HashCode>
+      <FileName>Frames\Book\BookPage.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="LibraryNET6Pages.EditBookPage" BaseTypeListCollapsed="true">
+    <Position X="0.5" Y="0.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AGABIAAAAEAAACABAABAAQQAAEAwAAAAAECCABAAQAg=</HashCode>
+      <FileName>Frames\Book\EditBookPage.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="LibraryNET6Pages.CataloguePage" BaseTypeListCollapsed="true">
+    <Position X="3" Y="6.25" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AgEAAACQAAAoAAQQAAAAAAAAAAAACQAAAIAAAAgAQAg=</HashCode>
+      <FileName>Frames\CataloguePage.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="LibraryNET6Pages.MainFrame" BaseTypeListCollapsed="true">
+    <Position X="10.25" Y="4" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAIAAAAAAAAAAAAAEAAAAAAAAAAAAAAQAg=</HashCode>
+      <FileName>Frames\MainFrame.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="LibraryNET6Pages.StudentsListWindow" BaseTypeListCollapsed="true">
+    <Position X="8.25" Y="6.25" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>SAAAABAAAAAAAAQAAAAAAAgIoAEAAABAAAAAAAgCCAA=</HashCode>
+      <FileName>Frames\StudentsListWindow.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="LibraryNET6Pages.Book">
+    <Position X="11.25" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQACAAABAoEgCEAkhAJBABAAAAAAQBABAAAAAAAAIAA=</HashCode>
+      <FileName>Models\Book.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LibraryNET6Pages.Genre">
+    <Position X="13" Y="5.75" Width="1.25" />
+    <TypeIdentifier>
+      <HashCode>AAACIAAAAAAAAAAAAABAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Genre.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LibraryNET6Pages.RentRow">
+    <Position X="17.25" Y="6" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>BAECAAoAQAAQAAAAAABCAAAAggAAAAAAAAEAAAAAAAA=</HashCode>
+      <FileName>Models\RentRow.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LibraryNET6Pages.Student">
+    <Position X="5.75" Y="6.25" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAACIAAAAAAAAAAAAABCAAQAAAAAAAAAAAAAAAAAAEA=</HashCode>
+      <FileName>Models\Student.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LibraryNET6Pages.MainWindow" BaseTypeListCollapsed="true">
+    <Position X="12.5" Y="4" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAA=</HashCode>
+      <FileName>MainWindow.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="System.Windows.Controls.Page" Collapsed="true">
+    <Position X="7.75" Y="1.25" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="System.Windows.Window" Collapsed="true">
+    <Position X="9.5" Y="1.25" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Object" Collapsed="true">
+    <Position X="11.25" Y="1.25" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

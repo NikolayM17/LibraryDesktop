@@ -172,17 +172,19 @@
 				<Image x:Name="BookImage" Stretch="UniformToFill"/>
 			</Border>
 
-			<Label x:Name="NameLabel" FontSize="25" FontFamily="Century Gothic"
-				  VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
-				  Grid.Column="0" Grid.ColumnSpan="15" Grid.Row="0" Grid.RowSpan="3"/>
+			<Label x:Name="NameLabel"
+				   FontSize="25" FontFamily="Century Gothic"
+				   VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+				   Grid.Column="0" Grid.ColumnSpan="15" Grid.Row="0" Grid.RowSpan="3"/>
 
-			<Label Content="Автор:" FontSize="20" FontFamily="Century Gothic" Foreground="#FF9001FF"
-				  VerticalContentAlignment="Bottom" HorizontalContentAlignment="Right"
-				  Grid.Column="4" Grid.ColumnSpan="2" Grid.Row="3" Grid.RowSpan="2"/>
+			<Label Content="Автор:"
+				   FontSize="20" FontFamily="Century Gothic" Foreground="#FF9001FF"
+				   VerticalContentAlignment="Bottom" HorizontalContentAlignment="Right"
+				   Grid.Column="4" Grid.ColumnSpan="2" Grid.Row="3" Grid.RowSpan="2"/>
 
-			<Label x:Name="AuthorLabel"  FontSize="20" FontFamily="Century Gothic"
+			<Label x:Name="AuthorLabel" FontSize="20" FontFamily="Century Gothic"
 				  HorizontalAlignment="Left"
-				  VerticalContentAlignment="Bottom" HorizontalContentAlignment="Stretch"
+				  VerticalContentAlignment="Bottom" HorizontalContentAlignment="Left"
 				  Grid.Column="6" Grid.ColumnSpan="6" Grid.Row="3" Grid.RowSpan="2"
 				  BorderThickness="0,0,0,1" BorderBrush="#FF9001FF"/>
 

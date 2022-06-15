@@ -32,7 +32,7 @@ namespace LibraryNET6Pages
 				return memStream.ToArray();
 			}
 
-			public static byte[] WpfImageToByteArray(BitmapImage image)
+			public static byte[] BitmapImageToByteArray(BitmapImage image)
 				=> ((MemoryStream)(image.StreamSource)).ToArray();
 
 			public static System.Windows.Controls.Image ByteArrayToWpfImage(byte[] binaryData)

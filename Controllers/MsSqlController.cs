@@ -8,8 +8,8 @@ using Microsoft.Data.SqlClient;
 
 namespace LibraryNET6Pages
 {
-    public class MsSqlController<T> : IDisposable
-        where T : Page
+    public class MsSqlController<T>
+		where T : Page
     {
         private List<Book> _bookList;
         private List<Genre> _genreList;
@@ -102,7 +102,7 @@ namespace LibraryNET6Pages
                         isPasswordCorrect = false;
                     }
                 }
-
+                connection.Close();
 			}
 
             return Tuple.Create(isUserAdmin, isPasswordCorrect);
@@ -163,7 +163,7 @@ namespace LibraryNET6Pages
                  $"set @author = '{book.Author}' " +
                  $"set @genre = '{book.Genre}' " +
                  $"set @description = '{book.Description}' " +
-                 (book.Date < 0 ? "" : $"set @date = {book.Date}, ") +
+                 (book.Date < 0 ? "" : $"set @date = {book.Date} ") +
 				 (book.MaxCount < 0 ? "" : $"set @count = {book.MaxCount} ") +
                  (book.Barcode < 0 ? "" : $"set @barcode = {book.Barcode} ") +
                  "" +
@@ -491,9 +491,9 @@ namespace LibraryNET6Pages
             return ExecuteCommand(command);
         }
 
-        public void Dispose()
-        {
+        ~MsSqlController()
+		{
             _connection.Close();
-        }
-    }
+		}
+	}
 }

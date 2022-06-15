@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Data.SqlClient;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -28,7 +29,14 @@ namespace LibraryNET6Pages
 		{
 			InitializeComponent();
 
-			_librarydb = new();
+			try
+			{
+				_librarydb = new();
+			}
+			catch (SqlException ex)
+			{
+				MessageBox.Show(ex.Message);
+			}
 
 			/*MessageBox.Show(_librarydb.User);*/
 
