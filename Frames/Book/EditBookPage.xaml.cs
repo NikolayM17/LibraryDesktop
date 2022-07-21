@@ -46,7 +46,7 @@ namespace LibraryNET6Pages
 				Convert.FromBase64String(book.Image)
 				).Source;*/
 
-			openFdRectangleImageBrush.ImageSource = (BitmapImage)ImageController.Convert.ByteArrayToWpfImage(
+			openFdRectangleImageBrush.ImageSource = (BitmapImage)ImageConverter.Convert.ByteArrayToWpfImage(
 				Convert.FromBase64String(book.Image)
 				).Source;
 
@@ -128,14 +128,14 @@ namespace LibraryNET6Pages
 		{
 			if (IsBookFilled() && IsBookCorrect())
 			{
-				var message = new MsSqlController<AdminPage>().EditBook(new Book(
+				var message = new MsSqlRepository<AdminPage>().EditBook(new Book(
 					_id,
 					TitleTextBox.Text,
 					AuthorTextBox.Text,
 					GenreTextBox.Text,
 					DescriptionTextBox.Text,
 					/*ImageController.Convert.WpfImageToByteArray(BookImage),*/
-					ImageController.Convert.WpfImageToByteArray(new Image()
+					ImageConverter.Convert.WpfImageToByteArray(new Image()
 					{
 						Source = (BitmapImage)openFdRectangleImageBrush.ImageSource
 					}),
@@ -191,15 +191,15 @@ namespace LibraryNET6Pages
 		{
 			bool result = false;
 
-			if (!InputDataController.IsDataParsedToInt(YearTextBox.Text))
+			if (!InputDataHandler.IsDataParsedToInt(YearTextBox.Text))
 			{
 				MessageBox.Show("Проверьте год выпуска книги");
 			}
-			else if (!InputDataController.IsDataParsedToInt(MaxCountTextBox.Text))
+			else if (!InputDataHandler.IsDataParsedToInt(MaxCountTextBox.Text))
 			{
 				MessageBox.Show("Проверьте количество оставшихся книг");
 			}
-			else if (!InputDataController.IsDataParsedToLong(BarcodeTextBox.Text))
+			else if (!InputDataHandler.IsDataParsedToLong(BarcodeTextBox.Text))
 			{
 				MessageBox.Show("Проверьте код книги");
 			}
@@ -234,9 +234,9 @@ namespace LibraryNET6Pages
 
 		private void UpdateCount()
 		{
-			if (InputDataController.IsDataParsedToInt(MaxCountTextBox.Text))
+			if (InputDataHandler.IsDataParsedToInt(MaxCountTextBox.Text))
 			{
-				int count = MsSqlController<AdminPage>.GetRemainingCount(_id);
+				int count = MsSqlRepository<AdminPage>.GetRemainingCount(_id);
 
 				MaxCountTextBox.Text = count >= 0 ? count.ToString() : "";
 			}

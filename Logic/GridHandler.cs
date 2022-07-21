@@ -13,7 +13,7 @@ using System.Windows.Controls.Primitives;
 
 namespace LibraryNET6Pages
 {
-	class GridController
+	class GridHandler
 	{
 		private readonly Page _pageSender;
 
@@ -36,7 +36,7 @@ namespace LibraryNET6Pages
 
 		private List<object> _resourceList;
 
-		public GridController(Page pageSender)
+		public GridHandler(Page pageSender)
 		{
 			_pageSender = pageSender;
 
@@ -91,7 +91,7 @@ namespace LibraryNET6Pages
 		{
 			_currentBook = book;
 
-			border.Child = CreateButton(ImageController.Convert.ByteArrayToWpfImage(Convert.FromBase64String(book.Image)));
+			border.Child = CreateButton(ImageConverter.Convert.ByteArrayToWpfImage(Convert.FromBase64String(book.Image)));
 
 			return border;
 		}
@@ -121,7 +121,7 @@ namespace LibraryNET6Pages
 		{
 			_currentBook = book;
 
-			rectangle.Fill = CreateImageBrush(ImageController.Convert.ByteArrayToWpfImage(Convert.FromBase64String(book.Image)));
+			rectangle.Fill = CreateImageBrush(ImageConverter.Convert.ByteArrayToWpfImage(Convert.FromBase64String(book.Image)));
 			rectangle.MouseDown += rectangle_MouseDown;
 
 			SetContextMenu(rectangle, new string[] { "Edit", "Delete" });
@@ -325,7 +325,7 @@ namespace LibraryNET6Pages
 		{
 			if (((MenuItem)sender).Header.ToString() == "Delete")
 			{
-				new MsSqlController<AdminPage>().DeleteBook(_currentBook);
+				new MsSqlRepository<AdminPage>().DeleteBook(_currentBook);
 
 				((AdminPage)_pageSender).UpdateSearchResults();
 			}

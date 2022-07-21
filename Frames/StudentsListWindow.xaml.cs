@@ -38,7 +38,7 @@ namespace LibraryNET6Pages
 
 		private object _currentSelected;
 
-		private MsSqlController<AdminPage> _librarydb;
+		private MsSqlRepository<AdminPage> _librarydb;
 
 		public StudentsListWindow(int bookId)
 		{
@@ -280,7 +280,7 @@ namespace LibraryNET6Pages
 
 			if (count >= 0)
 			{
-				RemainingCountTextBox.Text = MsSqlController<AdminPage>.GetRemainingCount(_bookId).ToString();
+				RemainingCountTextBox.Text = MsSqlRepository<AdminPage>.GetRemainingCount(_bookId).ToString();
 			}
 		}
 
@@ -294,7 +294,7 @@ namespace LibraryNET6Pages
 
 			if (count >= 0)
 			{
-				RemainingCountTextBox.Text = MsSqlController<AdminPage>.GetRemainingCount(_bookId).ToString();
+				RemainingCountTextBox.Text = MsSqlRepository<AdminPage>.GetRemainingCount(_bookId).ToString();
 			}
 		}
 

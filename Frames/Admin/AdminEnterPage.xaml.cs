@@ -121,7 +121,7 @@ namespace LibraryNET6Pages
 
 		private async void AdminEnterButton_Click(object sender, RoutedEventArgs e)
 		{
-			var isEnterDataCorrect = InputDataController.CheckAdmin(LoginTextBox.Text, PasswordTextBox.Password);
+			var isEnterDataCorrect = InputDataHandler.CheckAdmin(LoginTextBox.Text, PasswordTextBox.Password);
 
 			if (isEnterDataCorrect.Item1 && isEnterDataCorrect.Item2)
 			{

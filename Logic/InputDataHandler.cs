@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace LibraryNET6Pages.Controllers
 {
-	public static class InputDataController
+	public static class InputDataHandler
 	{
 		public static Tuple<bool, bool> CheckAdmin(string login, string password)
-			=> MsSqlController<AdminPage>.IsEnterDataCorrect(login, password);
+			=> MsSqlRepository<AdminPage>.IsEnterDataCorrect(login, password);
 
 		public static bool IsDataParsedToInt(string data)
 			=> data.Length == 0 ?

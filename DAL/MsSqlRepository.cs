@@ -8,7 +8,7 @@ using Microsoft.Data.SqlClient;
 
 namespace LibraryNET6Pages
 {
-    public class MsSqlController<T>
+    public class MsSqlRepository<T>
 		where T : Page
     {
         private List<Book> _bookList;
@@ -28,7 +28,7 @@ namespace LibraryNET6Pages
 
         private SqlConnection _connection;
 
-        public MsSqlController()
+        public MsSqlRepository()
         {
             _bookList = new List<Book>();
             _genreList = new List<Genre>();
@@ -491,7 +491,7 @@ namespace LibraryNET6Pages
             return ExecuteCommand(command);
         }
 
-        ~MsSqlController()
+        ~MsSqlRepository()
 		{
             _connection.Close();
 		}

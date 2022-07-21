@@ -23,7 +23,7 @@ namespace LibraryNET6Pages
 	/// </summary>
 	public partial class CataloguePage : Page
 	{
-		private MsSqlController<CataloguePage> _librarydb;
+		private MsSqlRepository<CataloguePage> _librarydb;
 
 		public CataloguePage()
 		{
@@ -97,7 +97,7 @@ namespace LibraryNET6Pages
 			{
 				foreach (var book in fourBooks)
 				{
-					var gridController = new GridController(this);
+					var gridController = new GridHandler(this);
 
 					borderList.Add(gridController
 						.FillRectangle(gridController
@@ -113,7 +113,7 @@ namespace LibraryNET6Pages
 
 			foreach (var fourBorders in listGridBorders)
 			{
-				var gridController = new GridController(this);
+				var gridController = new GridHandler(this);
 
 				var grid = gridController.FillGrid(gridController.CreateGrid(), fourBorders);
 

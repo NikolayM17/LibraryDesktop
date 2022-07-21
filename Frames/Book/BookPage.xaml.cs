@@ -37,7 +37,7 @@ namespace LibraryNET6Pages
 			MaxCountLabel.Content = book.MaxCount;
 			BarcodeLabel.Content = book.Barcode;
 
-			RectangleImageBrush.ImageSource = (BitmapImage)ImageController.Convert.ByteArrayToWpfImage(
+			RectangleImageBrush.ImageSource = (BitmapImage)ImageConverter.Convert.ByteArrayToWpfImage(
 				Convert.FromBase64String(book.Image)
 				).Source;
 

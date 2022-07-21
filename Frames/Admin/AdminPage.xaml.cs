@@ -21,7 +21,7 @@ namespace LibraryNET6Pages
 	/// </summary>
 	public partial class AdminPage : Page
 	{
-		private MsSqlController<AdminPage> _librarydb;
+		private MsSqlRepository<AdminPage> _librarydb;
 
 		public AdminPage()
 		{
@@ -82,7 +82,7 @@ namespace LibraryNET6Pages
 			{
 				foreach (var book in fourBooks)
 				{
-					var gridController = new GridController(this);
+					var gridController = new GridHandler(this);
 
 					var newBorder = gridController.CreateBorder(foundBooks.IndexOf(book));
 
@@ -98,7 +98,7 @@ namespace LibraryNET6Pages
 
 			foreach (var fourBorders in listBorderLists)
 			{
-				var gridController = new GridController(this);
+				var gridController = new GridHandler(this);
 
 				var grid = gridController.FillGrid(gridController.CreateGrid(), fourBorders);
 

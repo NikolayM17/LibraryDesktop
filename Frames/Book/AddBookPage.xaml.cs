@@ -51,14 +51,14 @@ namespace LibraryNET6Pages
 		{
 			if (IsBookFilled() && IsBookCorrect())
 			{
-				var message = new MsSqlController<AdminPage>().AddBook(new Book(
+				var message = new MsSqlRepository<AdminPage>().AddBook(new Book(
 					0,
 					TitleTextBox.Text,
 					AuthorTextBox.Text,
 					GenreTextBox.Text,
 					DescriptionTextBox.Text,
 					/*ImageController.Convert.WpfImageToByteArray(BookImage),*/
-					ImageController.Convert.WpfImageToByteArray(new Image()
+					ImageConverter.Convert.WpfImageToByteArray(new Image()
 					{
 						Source = openFdRectangleImageBrush.ImageSource
 					}),
@@ -114,15 +114,15 @@ namespace LibraryNET6Pages
 		{
 			bool result = false;
 
-			if (!InputDataController.IsDataParsedToInt(YearTextBox.Text))
+			if (!InputDataHandler.IsDataParsedToInt(YearTextBox.Text))
 			{
 				MessageBox.Show("Проверьте год выпуска книги");
 			}
-			else if (!InputDataController.IsDataParsedToInt(MaxCountTextBox.Text))
+			else if (!InputDataHandler.IsDataParsedToInt(MaxCountTextBox.Text))
 			{
 				MessageBox.Show("Проверьте количество оставшихся книг");
 			}
-			else if (!InputDataController.IsDataParsedToLong(BarcodeTextBox.Text))
+			else if (!InputDataHandler.IsDataParsedToLong(BarcodeTextBox.Text))
 			{
 				MessageBox.Show("Проверьте код книги");
 			}
